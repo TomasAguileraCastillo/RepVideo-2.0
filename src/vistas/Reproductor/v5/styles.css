@@ -1,0 +1,77 @@
+ /* Estilos para el contenedor del reproductor */
+.player-container {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+/* Oculta los controles nativos del video */
+.video {
+    width: 100%;
+    height: 100%;
+}
+.video::-webkit-media-controls {
+    display: none !important;
+}
+
+/* Estilos del contenedor de controles flotantes */
+.controls-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    opacity: 0; /* Por defecto, los controles están ocultos */
+    transition: opacity 0.3s ease;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+    z-index: 10;
+}
+
+/* Mostrar los controles al pasar el ratón */
+.player-container:hover .controls-overlay {
+    opacity: 1;
+}
+
+/* Estilos para la barra de controles */
+.controls-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Estilos de los botones de control */
+.control-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.control-btn:hover {
+    color: #999;
+}
+
+/* Estilos para la barra de progreso */
+.progress-bar-container {
+    flex-grow: 1;
+}
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+}
+.progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
