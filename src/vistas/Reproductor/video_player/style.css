@@ -1,0 +1,238 @@
+.player-container {
+  position: relative;
+  overflow: hidden;
+  background: #000;
+  /* El cursor inicial se gestiona dinámicamente */
+  cursor: default;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+}
+
+/* Oculta los controles nativos para usar los personalizados */
+.video::-webkit-media-controls {
+  display: none !important;
+}
+
+.controls-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 18px 10px 18px;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  will-change: opacity; /* Optimización de rendimiento */
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Estado Inactivo (Ocultar controles) */
+.player-container.inactive .controls-overlay {
+  opacity: 0;
+  pointer-events: none; /* Mejor UX: permite clics al video subyacente */
+}
+
+.player-container.inactive {
+  cursor: none; /* Ocultar cursor en inactividad */
+}
+
+.main-controls-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  margin-bottom: 5px;
+}
+
+.control-btn.big-icon {
+  font-size: 2.2rem;
+  color: #fff;
+  margin: 0 20px;
+  padding: 0;
+  transition: transform 0.15s ease, color 0.2s ease;
+}
+
+.control-btn.big-icon:hover {
+  color: #fff;
+  transform: scale(1.25);
+  text-shadow: 0 0 10px #0087ff;
+}
+
+.controls-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.1s ease;
+  padding: 5px;
+}
+
+.control-btn:hover {
+  color: #ccc;
+}
+
+/* Barra de progreso */
+.progress-bar-container {
+  flex-grow: 1;
+  padding: 0;
+  order: 3;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  transition: height 0.1s ease;
+}
+
+.progress-bar:hover {
+  height: 6px;
+}
+
+.progress-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 8px;
+  background: #0087ff;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  transition: width 0.1s ease, height 0.1s ease, background 0.1s ease;
+}
+
+.progress-bar:hover::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  box-shadow: 0 0 5px rgba(0, 135, 255, 0.8);
+}
+
+/* Slider de Volumen */
+.volume-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  order: 6;
+  padding-right: 8px;
+  cursor: default;
+}
+
+#volume-slider {
+  width: 0;
+  opacity: 0;
+  height: 4px;
+  transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  margin-left: 0;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+}
+
+#volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.volume-group:hover #volume-slider {
+  width: 60px;
+  opacity: 1;
+  margin-left: 5px;
+  pointer-events: auto;
+}
+
+/* Display de Tiempos */
+#time-display,
+#duration-display {
+  font-size: 0.75rem !important;
+  opacity: 0.85; /* Ligero aumento de opacidad para mejor lectura */
+  text-align: center;
+  white-space: nowrap;
+}
+
+#time-display {
+  order: 1;
+  min-width: 45px;
+}
+#duration-display {
+  order: 5;
+  min-width: 45px;
+}
+#fullscreen-btn {
+  order: 8;
+}
+
+/* Feedback Visual (Oscurecimiento en salto de tiempo) */
+.video-feedback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  transition: background-color 0.1s ease-in-out;
+  z-index: 5;
+}
+
+.video-feedback.active {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos para la Marca de Agua (Watermark) */
+#watermark {
+  /* Posicionamiento y capa */
+  position: absolute;
+  top: 15px; /* Distancia desde arriba */
+  right: 15px; /* Distancia desde la derecha */
+  z-index: 8; /* Debe estar sobre el video (z-index: 1) pero bajo los controles (z-index: 10) */
+
+  /* Estilo y apariencia */
+  color: rgba(255, 255, 255, 0.5); /* Blanco semi-transparente */
+  font-size: 0.9rem;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6); /* Sombra para que se vea en fondos claros u oscuros */
+
+  /* UX: Crucial para no bloquear clics */
+  pointer-events: none;
+
+  /* Animación opcional */
+  transition: opacity 0.4s ease;
+}
+
+/* Opcional: Ocultar la marca de agua cuando los controles están ocultos */
+.player-container.inactive #watermark {
+  opacity: 0;
+}
