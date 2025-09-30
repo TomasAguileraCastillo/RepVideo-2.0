@@ -58,7 +58,7 @@
     <main>
         <div class="contenedor">
             <video class="fm-video video-js vjs-16-9 vjs-big-play-centered" data-setup="{}" controls id="fm-video">
-                <source src="../../src/files/<?php echo $_GET["saludo"];?>" type="video/mp4">
+                <source src="../../files/<?php echo $_GET["videos"];?>" type="video/mp4">
             </video>
 
             <!--

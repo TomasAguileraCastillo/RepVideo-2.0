@@ -37,7 +37,7 @@ switch ($_GET["op"]){
 						
 						if ($_FILES['video']['type'] == "video/mp4" || $_FILES['video']['type'] == "video/mvk"){
 							$videos = round(microtime(true)) . '.' . end($ext);
-							move_uploaded_file($_FILES["video"]["tmp_name"], "../files/videos/" . $videos);
+							move_uploaded_file($_FILES["video"]["tmp_name"], "../files/videos_cursos/" . $videos);
 						}
 					}
 					/********************************************************** */
@@ -102,13 +102,13 @@ switch ($_GET["op"]){
                     "6"=>$reg->curso_video,
                     "7"=>//"<a href='../vistas/Reproductor/reproductor.php?saludo=".$reg->ubicacion_video." ' target='_blank'>link</a>
                          "<div class='input-group'>
-                            <a class='btn btn-outline-secondary border-0' href='../vistas/Reproductor/reproductor.php?saludo=".$reg->ubicacion_video." ' target='_blank' role='button'> 
+                            <a class='btn btn-outline-secondary border-0' href='../vistas/Reproductor/video_player/video_player.php?videos=".$reg->ubicacion_video." ' target='_blank' role='button'> 
                                 <i class='bi bi-lightning-charge-fill'></i>
                             </a> 
-                            <input type='hidden' name='target1' id='target1' value='../vistas/Reproductor/reproductor.php?saludo=".$reg->ubicacion_video." '>
+                            <!--<input type='hidden' name='target1' id='target1' value='../vistas/Reproductor/reproductor.php?saludo=".$reg->ubicacion_video." '>
                                 <button type='button' class='btn btn-outline-secondary border-0' onclick='copiar()'>
                                     <i class='bi bi-clipboard'></i>
-                                </button>
+                                </button>-->
                         </div>",
 /*link Usuario*/    //"4"=>"<a href='../vistas/Reproductor/reproductor.php?saludo=".$reg->ubicacion_video." ' target='_blank'>link</a>",
 /*link Admin*/      "8"=>//"<a class='btn btn-outline-secondary border-0' href='../files/".$reg->ubicacion_video."' target='_blank' rel='noopener noreferrer' >link</a>",
@@ -122,7 +122,12 @@ switch ($_GET["op"]){
                             </video>",
                     "10"=>($reg->condicion_video)?
                     '<span class="badge bg-success" >Activo</span>':
+                    '<span class="badge bg-danger">Inactivo</span>',
+                    "11"=>($reg->condicion_video)?
+                    '<span class="badge bg-success" >Activo</span>':
                     '<span class="badge bg-danger">Inactivo</span>'
+
+
                 );
             }
             $results = array(
