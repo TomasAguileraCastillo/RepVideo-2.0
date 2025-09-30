@@ -2,15 +2,12 @@
 ob_start();//activacion en almacenamiento de buffer
 session_start(); //iniciacion de session de usuario
 
-if (!isset($_SESSION["nombre"]))
-    {
-        header("location: login.php");
-        
-    }
-    else
-    {
+if (!isset($_SESSION["nombre"])) {
+    header("location: login.php");
+
+} else {
     require 'header.php';
-?>
+    ?>
 <style>
 img.tamaño {
     max-width: 30%;
@@ -106,15 +103,14 @@ function copiar() {
                             <th style="width: 200px;">Opciones </th>
                             <th>Nombre </th>
                             <th>Descripción </th>
-                            <th>Fecha </th>
-                            <th>Ususario</th>
-                            <th>Curso </th>
+                            <th>Fecha subido</th>
+                            <th>Subido por:</th>
+                            <th>Pertenece al Curso </th>
+                            <th>Tamaño</th>
                             <th>Link Usuario</th>
                             <th>Link Admin</th>
                             <th>Video Miniatura</th>
-                            <th>Tamaño</th>
                             <th>Condición
-
                             </th>
                         </thead>
                         <tbody class="table-group-divider">
@@ -135,7 +131,7 @@ function copiar() {
 
 
 <?php
-require 'footer.php';
+    require 'footer.php';
 
 }
 ob_end_flush();//liberacion de espacio en buffer
