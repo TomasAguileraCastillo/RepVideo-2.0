@@ -95,13 +95,11 @@ switch ($_GET["op"]) {
                 '    <button class="btn btn-success " onclick="activar('.$reg->id_video.')"> 
                            <i class="bi bi-check-lg"></i>
                         </button>',
-                "1" => $reg->nombre_video,
+                "1" => $reg->curso_video,
                 "2" => $reg->descripcion_video,
                 "3" => $reg->fechaSub_video,
                 "4" => $reg->subidopor_video,
-                "5" => $reg->curso_video,
-                "6" => $reg->peso_video,
-                "7" => //"<a href='../vistas/Reproductor/reproductor.php?saludo=".$reg->ubicacion_video." ' target='_blank'>link</a>
+                "5" => //"<a href='../vistas/Reproductor/reproductor.php?saludo=".$reg->ubicacion_video." ' target='_blank'>link</a>
                      "<div class='input-group'>
                             <a class='btn btn-outline-secondary border-0' href='../vistas/Reproductor/video_player/video_player.php?videos=".$reg->ubicacion_video." ' target='_blank' role='button'> 
                                 <i class='bi bi-lightning-charge-fill'></i>
@@ -112,15 +110,22 @@ switch ($_GET["op"]) {
                                 </button>-->
                         </div>",
 /*link Usuario*/    //"4"=>"<a href='../vistas/Reproductor/reproductor.php?saludo=".$reg->ubicacion_video." ' target='_blank'>link</a>",
-/*link Admin*/      "8" => //"<a class='btn btn-outline-secondary border-0' href='../files/".$reg->ubicacion_video."' target='_blank' rel='noopener noreferrer' >link</a>",
+/*link Admin*/      "6" => //"<a class='btn btn-outline-secondary border-0' href='../files/".$reg->ubicacion_video."' target='_blank' rel='noopener noreferrer' >link</a>",
                 "<div class='input-group'>
                         <a class='btn btn-outline-secondary border-0' href='../files/".$reg->ubicacion_video."'  target='_blank' role='button'>
                             <i class='bi bi-lightning-charge-fill'></i>
                         </a>
                     </div>",
+                "7" => $reg->nombre_video,
+                "8" => $reg->peso_video,
                 "9" => "  <video width='100%' height='35'>
                                 <source src='../files/".$reg->ubicacion_video."'>
                             </video>",
+
+
+
+
+
                 "10" => ($reg->condicion_video) ?
                 '<span class="badge bg-success" >Activo</span>' :
                 '<span class="badge bg-danger">Inactivo</span>',
@@ -137,10 +142,10 @@ switch ($_GET["op"]) {
         echo json_encode($results);
         break;
     case "seleccionCurso":
-        //require_once "../modelos/Video.php";
-        $rspta = $videos->select(); // instanciacion de clase
+        require_once "../modelo/Video.php";
+        $rspta = $videos->selectHtml(); // instanciacion de clase
         while ($reg = $rspta->fetch_object()) {
-            echo '<option value='. $reg->id_cursos . '>' .$reg->nombre_cursos.' </option>';
+            echo '<option value='. $reg->id_cursos . '> '.$reg->descripcion_cursos.' </option>';
         }
         break;
         /************************************************************************************************************ */
@@ -164,5 +169,9 @@ switch ($_GET["op"]) {
         }
         echo json_encode($fetch);
         break;
+
+
+
+
 }
 ob_end_flush();

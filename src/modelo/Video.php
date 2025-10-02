@@ -86,9 +86,9 @@ FROM db_videos.videos;";
     }
     /****************************************************************************** */
     //Método para listar los registros y mostrar en el select
-    public function select()
+    public function selectHtml()
     {
-        $sql = "SELECT * FROM videos WHERE condicion_video=1";
+        $sql = "SELECT * FROM cursos WHERE estado_cursos = '1';";
         return ejecutarConsulta($sql);
     }
 

@@ -11,7 +11,7 @@ function init() {
 
   //  $("#imagenmuestra").hide();
 
-  $.post("../ajax/video.php?op=seleccionCurso", function (r) {
+  $.post("../../ajax/video.php?op=seleccionCurso", function (r) {
     $("#idcurso").html(r);
     //$('#idcurso').selectpicker('refresh');
   });

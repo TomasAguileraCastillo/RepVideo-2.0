@@ -45,43 +45,38 @@ function copiar() {
                 <div class="panel-body" id="formularioregistros">
                     <form class="row g-3 " name="formulario" id="formulario" method="POST"
                         enctype="multipart/form-data">
-
                         <span id="mensaje">Ingrese los datos correspondientes para el registro adecuado del
                             video.</span>
-
                         <div class="form-floating ">
                             <input type="hidden" class="form-control" name="idvideo" id="idvideo">
                         </div>
                         <div class="form-floating col-md-6">
+                            <select class="form-select" id="idcurso" name="idcurso" data-live-search="true" required>
+                            </select>
+                            <label>Curso al que Pertenece</label>
+                        </div>
+                        <!--<div class="form-floating col-md-6">
                             <input type="text" class="form-control" id="nomb" name="nomb" autocomplete="off"
                                 placeholder="Nombre" onkeypress="return OnLchr(event)" required>
                             <label>Nombre del Video</label>
-                        </div>
+                        </div>-->
                         <div class="form-floating col-md-6">
                             <input type="text" class="form-control" id="desc" name="desc" autocomplete="off"
                                 placeholder="Apellido" onkeypress="return OnLchr(event)" required>
                             <label>Descripción del Video</label>
                         </div>
-                        <div class="form-floating col-md-6">
-                            <select class="form-select" id="idcurso" name="idcurso">
-                            </select>
-                            <label>Curso al que Pertenece</label>
-                        </div>
-
-
-
                         <div class="col-md-6">
                             <div>Archivo
                                 <input type="file" class="form-control tamaño" name="arch" id="arch" accept="video/*"
                                     required>
                             </div>
                         </div>
-                        <div class=" form-floating col-md-12">
+                        <!--<div class=" form-floating col-md-12">
                             <textarea type="text" class="form-control" id="comen" name="come "
                                 onkeypress="return OnLchr(event)" onblur="clen(comentarios)" aria-label="With textarea"
                                 placeholder="Comentarios" autocomplete="off" required></textarea>
                             <label>Comentarios</label>
-                        </div>
+                        </div>-->
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <button class="btn btn-primary  col-md-2" type="submit" id="btnGuardar" name="btnGuardar">
                                 <i class="fa fa-save"></i> Guardar
@@ -101,14 +96,14 @@ function copiar() {
                         <caption><b>Listado de Videos Registrados</b></caption>
                         <thead class="table-light">
                             <th style="width: 200px;">Opciones </th>
-                            <th>Nombre </th>
+                            <th>Pertenece al Curso </th>
                             <th>Descripción </th>
                             <th>Fecha subido</th>
                             <th>Subido por:</th>
-                            <th>Pertenece al Curso </th>
-                            <th>Tamaño</th>
                             <th>Link Usuario</th>
                             <th>Link Admin</th>
+                            <th>Nombre </th>
+                            <th>Tamaño</th>
                             <th>Video Miniatura</th>
                             <th>Condición
                             </th>
