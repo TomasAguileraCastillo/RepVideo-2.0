@@ -55,20 +55,22 @@ function copiar() {
                             </select>
                             <label>Curso al que Pertenece</label>
                         </div>
+
+
                         <!--<div class="form-floating col-md-6">
                             <input type="text" class="form-control" id="nomb" name="nomb" autocomplete="off"
                                 placeholder="Nombre" onkeypress="return OnLchr(event)" required>
                             <label>Nombre del Video</label>
                         </div>-->
                         <div class="form-floating col-md-6">
-                            <input type="text" class="form-control" id="desc" name="desc" autocomplete="off"
-                                placeholder="Apellido" onkeypress="return OnLchr(event)" required>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion"
+                                autocomplete="off" placeholder="Descripcion" onkeypress="return OnLchr(event)" required>
                             <label>Descripción del Video</label>
                         </div>
                         <div class="col-md-6">
                             <div>Archivo
-                                <input type="file" class="form-control tamaño" name="arch" id="arch" accept="video/*"
-                                    required>
+                                <input type="file" class="form-control tamaño" name="archivoVideo" id="archivoVideo"
+                                    accept="video/*" required>
                             </div>
                         </div>
                         <!--<div class=" form-floating col-md-12">

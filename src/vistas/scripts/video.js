@@ -11,9 +11,9 @@ function init() {
 
   //  $("#imagenmuestra").hide();
 
-  $.post("../../ajax/video.php?op=seleccionCurso", function (r) {
+  $.post("../ajax/video.php?op=seleccionCurso", function (r) {
     $("#idcurso").html(r);
-    //$('#idcurso').selectpicker('refresh');
+    $("#idcurso").selectpicker("refresh");
   });
 }
 /********************************************************************************** */
@@ -107,7 +107,7 @@ function guardaryeditar(e) {
   $("#btnGuardar").prop("disabled", true);
   var formData = new FormData($("#formulario")[0]);
   $.ajax({
-    url: "../ajax/video.php?op=guardaryeditar",
+    url: "../../ajax/video.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,

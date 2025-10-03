@@ -86,11 +86,19 @@ FROM db_videos.videos;";
     }
     /****************************************************************************** */
     //Método para listar los registros y mostrar en el select
+
     public function selectHtml()
     {
-        $sql = "SELECT * FROM cursos WHERE estado_cursos = '1';";
+        // Seleccionamos solo las columnas que se usarán en el HTML
+        // y asumimos que estado_cursos es numérico (1)
+        $sql = "SELECT id_cursos, codigo_cursos, descripcion_cursos FROM cursos WHERE estado_cursos = 1";
+
+        // Llamar a la función que ejecuta la consulta y devuelve el resultado (mysqli_result)
         return ejecutarConsulta($sql);
     }
+
+
+
 
 
     /****************************************************************************** */

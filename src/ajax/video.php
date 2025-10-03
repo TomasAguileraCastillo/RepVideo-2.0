@@ -143,11 +143,15 @@ switch ($_GET["op"]) {
         break;
     case "seleccionCurso":
         require_once "../modelo/Video.php";
+        echo '<option value="" selected disabled hidden>  </option>';
         $rspta = $videos->selectHtml(); // instanciacion de clase
         while ($reg = $rspta->fetch_object()) {
-            echo '<option value='. $reg->id_cursos . '> '.$reg->descripcion_cursos.' </option>';
+            $valor_opcion = htmlspecialchars($reg->id_cursos);
+            $texto_opcion = htmlspecialchars($reg->codigo_cursos . '     |    ' . $reg->descripcion_cursos);
+            echo '<option value="' . $valor_opcion . '">' . $texto_opcion . '</option>';
         }
         break;
+
         /************************************************************************************************************ */
     case 'verificar':
         $loginac = $_POST['loginac'];
