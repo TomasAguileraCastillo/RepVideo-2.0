@@ -1,3 +1,26 @@
+<?php
+// ==========================================================
+// 1. LÓGICA DE SESIÓN Y AUTENTICACIÓN (¡Debe ser lo primero!)
+// ==========================================================
+
+// Iniciar la sesión si aún no está iniciada
+if (strlen(session_id()) < 1) {
+    session_start();
+}
+
+// Comprobación de seguridad: Si el usuario no está autenticado, redirigir al login
+if (!isset($_SESSION['idusuario']) || $_SESSION['idusuario'] == null) {
+    header("Location: ../index.php"); // Asegúrate de que esta ruta sea correcta para tu página de login
+    exit();
+}
+
+// 2. INCLUIR EL ENCABEZADO
+// El header.php abre: <html>, <head>, <body> y <div class="wrapper">.
+require_once "header.php";
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,70 +37,69 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
-<?php
-include_once 'header.php';
-?>
 
-<body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1></h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#"></a></li>
-                                <li class="breadcrumb-item active"></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div><!-- /.container-fluid -->
-            </section>
-            <!-- Main content -->
-            <section class="content">
-                <div class="error-page">
-                    <h2 class="headline text-warning"> 404</h2>
-                    <div class="error-content">
-                        <h3>
-                            <i class="fas fa-exclamation-triangle text-warning"></i> ¡Vaya! Página no encontrada.
-                        </h3>
-                        <p>
-                            No hemos podido encontrar la página que buscabas.
-                            Mientras tanto, puedes <a href="../../src/Public/index.php">Volver al panel anterior</a> o
-                            prueba a utilizar alguna otra Utilidad.
-                        </p>
-                    </div>
-                </div>
-            </section>
+<!--<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <div class="content-wrapper">-->
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#"></a></li>
+                    <li class="breadcrumb-item active"></li>
+                </ol>
+            </div>
         </div>
-        <?Php
-include_once 'footer.php';
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="error-page">
+        <h2 class="headline text-warning"> 404</h2>
+        <div class="error-content">
+            <h3>
+                <i class="bi bi-exclamation-triangle-fill"></i> ¡Vaya! Página no encontrada.
+            </h3>
+            <p>
+                No hemos podido encontrar la página que buscabas.
+                Mientras tanto, puedes <a href="../../src/Public/index.php">Volver al panel anterior</a> o
+                prueba a utilizar alguna otra Utilidad.
+            </p>
+        </div>
+    </div>
+</section>
+
+<?php
+// 4. INCLUIR EL PIE DE PÁGINA
+require_once 'footer.php';
+// Liberación del buffer al final del archivo
+ob_end_flush();
 ?>
 
 
 
 
+<!-- Control Sidebar 
+    <aside class="control-sidebar control-sidebar-dark">-->
+<!-- Control sidebar content goes here 
+    </aside>-->
+<!-- /.control-sidebar 
+    </div>-->
+<!-- ./wrapper -->
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
-
-    <!-- jQuery -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../../dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
+<!-- jQuery 
+    <script src="../../plugins/jquery/jquery.min.js"></script>-->
+<!-- Bootstrap 4 
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+<!-- AdminLTE App 
+    <script src="../../dist/js/adminlte.min.js"></script>-->
+<!-- AdminLTE for demo purposes 
     <script src="../../dist/js/demo.js"></script>
 </body>
 
-</html>
+</html>-->

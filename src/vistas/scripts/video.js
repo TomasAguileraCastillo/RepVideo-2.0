@@ -13,19 +13,31 @@ function init() {
 
   $.post("../ajax/video.php?op=seleccionCurso", function (r) {
     $("#idcurso").html(r);
-    $("#idcurso").selectpicker("refresh");
+    //$("#idcurso").selectpicker("refresh");
   });
 }
 /********************************************************************************** */
 //Función limpiar
 function limpiar() {
-  $("#nomb").val("");
-  $("#desc").val("");
-  $("#idcurso").val("");
-  $("#comen").val("");
-  $("#arch").attr("src", "");
+  // Campos de Texto/Select (Todos deben limpiarse)
+  $("#descripcion").val("");
+  $("#idcurso").val(""); // Limpiar el select del curso
+  // Campo de Archivo (Usamos .val("") para vaciar el input type="file")
+  $("#archivoVideo").val("");
+  // Campo Oculto
   $("#idvideo").val("");
+
+  // Opcional: etiqueta <video> o <img> de vista previa, limpia el src
+  //$("#vista_previa_video").attr("src", "");
 }
+
+/*//Función limpiar
+function limpiar() {
+  $("#descripcion").val("");
+  $("#idcurso").val("");
+  $("#archivoVideo").attr("src", "");
+  $("#idvideo").val("");
+}*/
 
 /********************************************************************************** */
 //Función mostrar formulario
@@ -107,7 +119,7 @@ function guardaryeditar(e) {
   $("#btnGuardar").prop("disabled", true);
   var formData = new FormData($("#formulario")[0]);
   $.ajax({
-    url: "../../ajax/video.php?op=guardaryeditar",
+    url: "../ajax/video.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,
@@ -122,7 +134,40 @@ function guardaryeditar(e) {
   limpiar();
 }
 /********************************************************************************** */
+
 function mostrar(idvideo) {
+  // 1. Corregir el bug (usar idvideo, no idvideos)
+  var dataToSend = { idvideo: idvideo };
+  // 2. jQuery se encarga de serializar y parsear la respuesta
+  $.post(
+    "../ajax/video.php?op=mostrar",
+    dataToSend,
+    function (data) {
+      // Manejo de error si el servidor devuelve un objeto con la propiedad 'error'
+      if (data && data.error) {
+        console.error("Error del servidor: ", data.error);
+        alert("No se pudieron cargar los datos.");
+        mostrarform(false);
+        return;
+      }
+
+      mostrarform(true);
+
+      // 3. Cargamos los campos
+      $("#idvideo").val(data.id_video);
+      // REVISAR: Usar el nombre de columna de la base de datos
+      $("#idcurso").val(data.curso_video);
+      $("#descripcion").val(data.descripcion_video);
+    },
+    "json" // OPTIMIZACIÓN: Le decimos a jQuery que espere JSON
+  ).fail(function (jqXHR, textStatus, errorThrown) {
+    // Mejor manejo de fallos de conexión o parsing
+    alert("Fallo al comunicarse con el servidor: " + textStatus);
+    mostrarform(false);
+  });
+}
+
+/*function mostrar(idvideo) {
   $.post(
     "../ajax/video.php?op=mostrar",
     { idvideo: idvideos },
@@ -139,31 +184,28 @@ function mostrar(idvideo) {
       $("#idvideo").val(data.id_videos);
     }
   );
-}
+}*/
 
 /*********************************************************************************** */
 //Función para desactivar registros
 function desactivar(idadesactivar) {
-  bootbox.confirm(
-    "¿Está Seguro de desactivar el Registros?",
-    function (result) {
-      if (result) {
-        $.post(
-          "../ajax/video.php?op=desactivar",
-          { idvideo: idadesactivar },
-          function (e) {
-            bootbox.alert(e); //muestra el mensaje del metodo ajax
-            tabla.ajax.reload();
-          }
-        );
-      }
+  bootbox.confirm("¿Está Seguro de desactivar el Registro?", function (result) {
+    if (result) {
+      $.post(
+        "../ajax/video.php?op=desactivar",
+        { idvideo: idadesactivar },
+        function (e) {
+          bootbox.alert(e); //muestra el mensaje del metodo ajax
+          tabla.ajax.reload();
+        }
+      );
     }
-  );
+  });
 }
 /********************************************************************************** */
 //Función para activar registros
 function activar(idadesactivar) {
-  bootbox.confirm("¿Está Seguro de activar el Registros?", function (result) {
+  bootbox.confirm("¿Está Seguro de activar el Registro?", function (result) {
     if (result) {
       $.post(
         "../ajax/video.php?op=activar",

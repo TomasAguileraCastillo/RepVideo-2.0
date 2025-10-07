@@ -6,16 +6,32 @@ require "../config/Conexion.php";
 class Videos
 {
     //Implementamos nuestro constructor
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
     /****************************************************************************** */
 
     //Implementamos un método para insertar registros
-    public function insertar($nombre, $descripcion, $comentario, $fechasubida, $subidopor, $curso, $ubicacion)
+    public function insertar($nombre, $descripcion, $fechasubida, $subidopor, $curso, $peso, $ubicacion, $condicion)
     {
-        $sql =  "INSERT INTO `video`(   `nombre_videos`,
+
+        $sql =  "INSERT INTO videos (  nombre_video, 
+                                        descripcion_video, 
+                                        fechaSub_video, 
+                                        subidopor_video, 
+                                        curso_video, 
+                                        peso_video, 
+                                        ubicacion_video, 
+                                        condicion_video)
+                VALUES                  ('$nombre',
+                                         '$descripcion',
+                                         '$fechasubida',
+                                         '$subidopor',
+                                         '$curso', 
+                                         '$peso', 
+                                         '$ubicacion', 
+                                         '$condicion');";
+
+
+        /*$sql =  "INSERT INTO `video`(   `nombre_videos`,
                                             `descripcion_videos`,
                                             `comentario_videos`,
                                             `fechasubida_videos`,
@@ -30,7 +46,7 @@ class Videos
                                             `$subidopor`,
                                             `$curso`,
                                             `$ubicacion`,
-                                            '1')";
+                                            '1')";*/
         return ejecutarConsulta($sql);
     }
     /****************************************************************************** */
@@ -64,25 +80,51 @@ class Videos
         return ejecutarConsulta($sql);
     }
     /****************************************************************************** */
-    //Implementar un método para mostrar los datos de un registro a modificar
-    public function mostrar($idvideos)
+    // Método para mostrar los datos de un registro a modificar
+    public function mostrar($idvideo)
     {
-        $sql = "SELECT * FROM video WHERE id_videos='$idvideos'";
+        // Esto mejora la legibilidad y el rendimiento (SELECT * debe evitarse).
+        $sql = "SELECT id_video, curso_video, descripcion_video  
+                FROM videos 
+                WHERE id_video = $idvideo";
+
+        // NOTA DE SEGURIDAD: Mantenemos el estándar de usar $idvideo sin comillas,
+        // asumiendo que el controlador lo limpió con intval().
+
         return ejecutarConsultaSimpleFila($sql);
     }
     /****************************************************************************** */
     //Método para listar los registros
     public function listar()
     {
+        $sql = "SELECT  v.id_video,
+                        v.descripcion_video, 
+                        v.fechaSub_video, 
+                        v.subidopor_video, 
+                        v.peso_video,
+                        v.ubicacion_video,
+                        v.condicion_video,
+                        v.nombre_video,
+                        -- Campo del curso: usamos la columna de la tabla 'curso'
+                        c.descripcion_cursos AS nombreCurso,
+                        c.codigo_cursos as codigoCurso,
+                        v.curso_video AS curso_id  -- Mantenemos el ID por si se necesita
+                FROM videos v 
+                INNER JOIN cursos c ON v.curso_video = c.id_cursos;";
 
-        //$sql = "SELECT * FROM videos";
-        $sql = "SELECT id_video, nombre_video, descripcion_video, fechaSub_video, subidopor_video, curso_video, peso_video, ubicacion_video, condicion_video
-FROM db_videos.videos;";
-
-
+        /*
+        $sql = "SELECT  id_video,
+                    nombre_video,
+                    descripcion_video,
+                    fechaSub_video,
+                    subidopor_video,
+                    curso_video,
+                    peso_video,
+                    ubicacion_video,
+                    condicion_video
+            FROM videos;";*/
 
         return ejecutarConsulta($sql);
-
     }
     /****************************************************************************** */
     //Método para listar los registros y mostrar en el select
@@ -118,7 +160,8 @@ FROM db_videos.videos;";
      * @param int $precision El número de decimales a mostrar.
      * @return string El tamaño formateado (ej: "450.00 KB") o un mensaje de error.
      */
-    public function tamanoArchivo(string $ruta_archivo, int $precision = 2): string
+
+    public function tamanoArchivo($ruta_archivo, int $precision = 2): string
     {
         // Usa la función nativa filesize() para obtener el tamaño en bytes.
         $bytes = @filesize($ruta_archivo);
@@ -143,5 +186,27 @@ FROM db_videos.videos;";
         // Combina el número formateado con su unidad
         return $tamano_formateado . ' ' . $unidades[$factor];
     }
+    /****************************************************************************** */
+    //Método para listar los registros
+    public function listarCursos()
+    {
+        $sql = "SELECT  id_cursos,
+                        codigo_cursos,
+                        descripcion_cursos,
+                        condicion_cursos,
+                        creadopor_cursos,
+                        fechaCreado_cursos
+			FROM cursos;";
 
+        return ejecutarConsulta($sql);
+    }
+
+    /****************************************************************************** */
+    //Implementamos un método para Eliminar Cursos
+    public function eliminarCurso($idCursos)
+    {
+        $sql = "DELETE FROM cursos
+			WHERE id_cursos='$idCursos';";
+        return ejecutarConsulta($sql);
+    }
 }

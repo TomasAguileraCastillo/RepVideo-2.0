@@ -24,12 +24,11 @@
   padding: 10px 18px 10px 18px;
   opacity: 1;
   transition: opacity 0.4s ease;
-  will-change: opacity; /* Optimización de rendimiento */
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  will-change: opacity;
+  /* Optimización de rendimiento */
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0) 100%);
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -39,11 +38,13 @@
 /* Estado Inactivo (Ocultar controles) */
 .player-container.inactive .controls-overlay {
   opacity: 0;
-  pointer-events: none; /* Mejor UX: permite clics al video subyacente */
+  pointer-events: none;
+  /* Mejor UX: permite clics al video subyacente */
 }
 
 .player-container.inactive {
-  cursor: none; /* Ocultar cursor en inactividad */
+  cursor: none;
+  /* Ocultar cursor en inactividad */
 }
 
 .main-controls-top {
@@ -176,7 +177,8 @@
 #time-display,
 #duration-display {
   font-size: 0.75rem !important;
-  opacity: 0.85; /* Ligero aumento de opacidad para mejor lectura */
+  opacity: 0.85;
+  /* Ligero aumento de opacidad para mejor lectura */
   text-align: center;
   white-space: nowrap;
 }
@@ -185,10 +187,12 @@
   order: 1;
   min-width: 45px;
 }
+
 #duration-display {
   order: 5;
   min-width: 45px;
 }
+
 #fullscreen-btn {
   order: 8;
 }
@@ -210,29 +214,45 @@
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+/* =================================================== */
 /* Estilos para la Marca de Agua (Watermark) */
-#watermark {
+/* =================================================== */
+
+/* Estilo Base para ambas marcas de agua */
+#watermark,
+#watermark-bl {
   /* Posicionamiento y capa */
   position: absolute;
-  top: 15px; /* Distancia desde arriba */
-  right: 15px; /* Distancia desde la derecha */
-  z-index: 8; /* Debe estar sobre el video (z-index: 1) pero bajo los controles (z-index: 10) */
+  z-index: 8;
 
-  /* Estilo y apariencia */
-  color: rgba(255, 255, 255, 0.5); /* Blanco semi-transparente */
+  /* Estilo y apariencia unificado */
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.9rem;
   font-weight: bold;
   font-family: Arial, sans-serif;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6); /* Sombra para que se vea en fondos claros u oscuros */
-
-  /* UX: Crucial para no bloquear clics */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
   pointer-events: none;
-
-  /* Animación opcional */
   transition: opacity 0.4s ease;
 }
 
+/* Marca de Agua 1: Superior Derecha */
+#watermark {
+  top: 15px;
+  /* Anclaje arriba */
+  right: 15px;
+  /* Anclaje derecha */
+}
+
+/* Marca de Agua 2: Inferior Izquierda */
+#watermark-bl {
+  bottom: 15px;
+  /* Anclaje ABAJO */
+  left: 15px;
+  /* Anclaje izquierda */
+}
+
 /* Opcional: Ocultar la marca de agua cuando los controles están ocultos */
-.player-container.inactive #watermark {
+.player-container.inactive #watermark,
+.player-container.inactive #watermark-bl {
   opacity: 0;
 }
