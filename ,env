@@ -1,0 +1,6 @@
+# .env
+DB_HOST=localhost
+DB_NAME=db_videos
+DB_USERNAME=root
+DB_PASSWORD=""
+PRO_NOMBRE="Mantenedor-Videos"

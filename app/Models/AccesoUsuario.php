@@ -20,44 +20,54 @@ class AccesoUsuario {
         }
     }
 
-    // =========================================================
+
+    // ...
     // 1. MÉTODO DE VERIFICACIÓN (CRÍTICO PARA EL LOGIN)
     // =========================================================
-    
     /**
      * Busca el registro de un usuario por su login.
-     * Retorna el objeto de resultado para obtener el hash de la clave.
-     * @param string $login El nombre de usuario a buscar.
-     * @return object|false Objeto de resultado de MySQLi o false si hay error.
+     * Retorna un objeto con los datos esenciales (incluida la clave hasheada).
+     * * @param string $login El nombre de usuario a buscar.
+     * @return object|null Objeto de usuario si se encuentra, o NULL si no existe.
      */
-    public function verifica($login) {
-        
-        // La consulta debe traer la columna 'clave' (que contiene el hash)
-        $sql = "SELECT idusuario, nombre, imagen, login, clave, condicion 
-                FROM usuario 
-                WHERE login = ?";
+    public function verifica(string $login): ?object
+    {
 
-        // --- Sentencia Preparada (Prevención de Inyección SQL) ---
-        
+        $sql = "SELECT idusuario, nombre, imagen, login, clave, condicion 
+            FROM usuario 
+            WHERE login = ?";
+
+        try {
         // 1. Preparar la consulta
         $stmt = $this->conexion->prepare($sql);
         
         if ($stmt === false) {
-            // Lanzar una excepción si la consulta es sintácticamente incorrecta
-            error_log("Error al preparar verifica: " . $this->conexion->error);
-            return false;
-        }
+                // Error interno: la consulta SQL es incorrecta
+                error_log("Error al preparar verifica: " . $this->conexion->error);
+                // Lanzar una excepción para que el controlador lo capture
+                throw new \Exception("Fallo interno en la consulta SQL.");
+            }
 
-        // 2. Vincular parámetros: "s" indica que $login es un string
-        $stmt->bind_param("s", $login);
-        
-        // 3. Ejecutar la consulta
+            // 2. Vincular parámetros: "s" indica que $login es un string
+            $stmt->bind_param("s", $login);
         $stmt->execute();
-        
-        // 4. Devolver el resultado para que el controlador AJAX pueda usar fetch_object()
-        return $stmt->get_result(); 
+
+            // 3. Obtener el resultado
+            $resultado = $stmt->get_result();
+
+            // 4. Devolver el objeto directamente (retorna NULL si no hay filas)
+            $usuario = $resultado->fetch_object();
+
+            $stmt->close();
+
+            return $usuario;
+        } catch (\Exception $e) {
+            error_log("Error en la BD al verificar login: " . $e->getMessage());
+            if (isset($stmt)) $stmt->close();
+            return null; // O false, dependiendo de la consistencia que uses.
+        }
     }
-    
+
     // =========================================================
     // 2. MÉTODO DE INSERCIÓN (Para guardar usuarios nuevos de forma segura)
     // =========================================================

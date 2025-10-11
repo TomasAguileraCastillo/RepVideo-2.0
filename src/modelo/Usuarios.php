@@ -57,6 +57,10 @@ class Usuarios
     /* */
 
     // Implementamos un método para editar registros
+
+
+
+
     public function editar($idvideos, $nombre, $descripcion, $comentario, $fechasubida, $subidopor, $curso, $ubicacion)
     {
         $sql = "  UPDATE `video`
@@ -155,11 +159,18 @@ class Usuarios
         return ejecutarConsulta($sql);
     }
 
+    /**
+     * 
+     */
+
+
     /* */
     public function verifica($login, $clave)
     {
         // $sql="SELECT * FROM usuario WHERE nombre_usuario = BINARY '$login' AND password_usuario = BINARY '$clave'";
-        $sql = "SELECT idusuario,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login FROM usuario WHERE login='$login' AND clave='$clave'";
+        $sql = "SELECT idusuario,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login 
+        FROM usuario 
+        WHERE login='$login' AND clave='$clave'";
         // $sql="SELECT * FROM usuario WHERE nombre_usuario= $login and password_usuario= $clave";
         return ejecutarConsulta($sql);
     }

@@ -95,9 +95,7 @@ function copiar() {
                             </select>
                             <label>Curso al que Pertenece</label>
                         </div>
-
-
-
+                        
                         <div class="col-md-6">
                             <div>Archivo
                                 <input type="file" class="form-control tamaño" name="arch" id="arch" accept="video/*"
@@ -132,11 +130,16 @@ function copiar() {
 
 
 
+
+
+
                             <b>Listado de Videos Registrados</b>
                         </caption>
                         <thead class="table-light">
                             <th>Opciones</th>
                             <th>Id</th>
+                            
+                            
                             <th>Nombre</th>
                             <th>tipo de Dcto.</th>
                             <th>Numero de Rut</th>
