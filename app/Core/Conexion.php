@@ -2,19 +2,22 @@
 
 namespace App\Core;
 
-class conexion implements DbConnectionInterface
+// CRÍTICO: Asegúrate de que existe la interfaz DbConnectionInterface
+// (Se omite por brevedad, asumiendo que existe)
+
+class Conexion // Implementa DbConnectionInterface
 {
     // Atributos
-
     private $connection;
     private static $instance = null;
 
-    // Constructor
-
+    // Constructor (Privado para el patrón Singleton)
     private function __construct()
     {
+        // Ruta al archivo de configuración
         $config = require __DIR__ . '/../../config/database.php';
 
+        // 1. Intentar la conexión
         $this->connection = new \mysqli(
             $config['host'],
             $config['user'],
@@ -22,19 +25,22 @@ class conexion implements DbConnectionInterface
             $config['dbname']
         );
 
-        // Define la codificación
+        // 2. Manejo de errores de conexión
+        if (mysqli_connect_errno()) {
+            // CRÍTICO: Usamos error_log en lugar de printf para NO ENVIAR SALIDA al navegador.
+            error_log("FALLO DE CONEXIÓN A LA BASE DE DATOS: " . mysqli_connect_error());
+            // Detenemos la ejecución de la aplicación, ya que la conexión es vital.
+            exit(); 
+        }
+
+        // 3. Definir la codificación
         $this->connection->query('SET NAMES "' . $config['encode'] . '"');
 
-        // Manejo de errores de conexión
-        if (mysqli_connect_errno()) {
-            printf("Falló conexión a la base de datos: %s\n", mysqli_connect_error());
-            exit();
-        }
+        // Nota: Asumiendo que DbConnectionInterface existe y se implementa
+        // si la necesitas, vuelve a añadir 'implements DbConnectionInterface'
     }
 
     // Métodos
-
-    // Método estático público para obtener la única instancia de la clase
 
     /**
      * @return Conexion
@@ -46,8 +52,6 @@ class conexion implements DbConnectionInterface
         }
         return self::$instance;
     }
-
-    // Método para obtener el objeto de conexión mysqli
 
     /**
      * @return \mysqli
@@ -62,8 +66,10 @@ class conexion implements DbConnectionInterface
     public function ejecutarSentenciaSegura(string $sql, array $params = [], string $types = '')
     {
         $stmt = $this->connection->prepare($sql);
+        
         // Manejar errores de preparación (por ejemplo, SQL malformado)
         if (!$stmt) {
+            // Asegúrate de que las excepciones se manejan o se registran, pero no se imprimen
             throw new \Exception('Error al preparar la sentencia: ' . $this->connection->error);
         }
 
@@ -81,15 +87,17 @@ class conexion implements DbConnectionInterface
             // Llamada dinámica a bind_param
             call_user_func_array([$stmt, 'bind_param'], $refs);
         }
+        
         // 3. Ejecuta la sentencia
         $stmt->execute();
 
         // 4. Retorna el resultado (dependiendo del tipo de consulta)
 
-        if (strtoupper(substr(trim($sql), 0, 6)) === 'INSERT') {
+        $sql_upper = strtoupper(trim($sql));
+        if (str_starts_with($sql_upper, 'INSERT')) {
             // Retorna el ID insertado para INSERT
             $result = $stmt->insert_id;
-        } elseif (strtoupper(substr(trim($sql), 0, 6)) === 'SELECT') {
+        } elseif (str_starts_with($sql_upper, 'SELECT')) {
             // Retorna el resultado para SELECT
             $result = $stmt->get_result();
         } else {
@@ -103,3 +111,4 @@ class conexion implements DbConnectionInterface
 
     // getters y setters
 }
+// IMPORTANTE: Etiqueta de cierre eliminada

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Solicitud de Equipamiento | Área de Salud</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* -------------------------------------------------------------------------- */
+        /* INICIO: ESTILOS MODERNOS Y OPTIMIZADOS */
+        /* -------------------------------------------------------------------------- */
+
+        /* Paleta de Salud Refinada */
+        :root {
+            --health-primary: #004c99;
+            /* Azul más profundo y profesional */
+            --health-secondary: #28a745;
+            /* Verde de éxito/vida */
+            --health-light: #e6f0ff;
+            /* Azul muy claro para fondos sutiles */
+        }
+
+        .bg-health-primary {
+            background-color: var(--health-primary) !important;
+        }
+
+        .text-health-primary {
+            color: var(--health-primary) !important;
+        }
+
+        .btn-health {
+            background-color: var(--health-primary);
+            color: white;
+            border-color: var(--health-primary);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-health:hover {
+            background-color: #003366;
+            /* Azul más oscuro al pasar el mouse */
+            border-color: #003366;
+            box-shadow: 0 4px 8px rgba(0, 76, 153, 0.4);
+        }
+
+        /* Estilos Generales y Tipografía */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--health-light);
+            /* Fondo más claro y con matiz azul */
+            padding-top: 5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-wrap {
+            flex-grow: 1;
+        }
+
+        .form-card {
+            background-color: #ffffff;
+            border-radius: 1.25rem;
+            /* Bordes más redondeados */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            /* Sombra más sutil y extensa */
+            padding: 2.5rem;
+        }
+
+        /* Header/Footer/Títulos */
+        .app-footer {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            padding: 1rem 0;
+            border-top: 3px solid var(--health-primary);
+            margin-top: 3rem;
+            font-size: 0.85rem;
+        }
+
+        .footer-logo-text {
+            color: var(--health-primary);
+            font-weight: bold;
+        }
+
+        .main-title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--health-primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .main-title {
+            color: var(--health-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            /* Ligeramente menos bold */
+            margin-bottom: 0;
+        }
+
+        /* Resumen de la Solicitud (Mejorado) */
+        .resumen-card {
+            border-left: 5px solid var(--health-primary);
+            /* Borde de énfasis */
+            background-color: #f7f9fc;
+            /* Fondo sutilmente gris/azul */
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .resumen-card h6 {
+            color: var(--health-primary);
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Compromiso de Devolución */
+        .compromiso-equipos {
+            border-left: 4px solid var(--health-secondary);
+            /* Verde de éxito/compromiso */
+            background-color: #e6fae8;
+            /* Fondo verde muy claro */
+            padding: 1.2rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .compromiso-equipos h6 {
+            color: var(--health-secondary);
+        }
+
+        /* QR Placeholder */
+        .qr-placeholder {
+            width: 120px;
+            height: 120px;
+            background-color: #f8f8f8;
+            border: 2px solid #ddd;
+            /* IMAGEN DE QR DE EJEMPLO PARA EL PROTOTIPO */
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_many_things.svg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0;
+            /* Ocultamos el texto si hay imagen */
+            color: transparent;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* Sombra para modernizar */
+        }
+
+        /* Ocultar elementos no esenciales al imprimir */
+        @media print {
+
+            .app-footer,
+            .navbar,
+            #btnGuardar,
+            #btnCerrar,
+            .compromiso-equipos {
+                display: none !important;
+            }
+
+            .main-title-container {
+                border-bottom: none !important;
+                padding-bottom: 0 !important;
+            }
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* FIN: ESTILOS MODERNOS Y OPTIMIZADOS */
+        /* -------------------------------------------------------------------------- */
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-health-primary fixed-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <i class="bi bi-union me-2 fs-4 text-white"></i>
+                    <span class="fw-bold">HEP - Solicitud de Equipamiento</span>
+                </a>
+                <span class="navbar-text text-white-50 small d-none d-sm-block">
+                    Unidad de Desarrollo de Personas y Organización (UDOP)
+                </span>
+            </div>
+        </nav>
+    </header>
+    <div class="content-wrap">
+        <div class="container my-5">
+            <div class="form-card">
+
+                <div class="main-title-container">
+                    <h1 class="main-title">Solicitud de Proyector, Notebook y/o Fantomas</h1>
+                    <div class="fw-bold text-health-primary small text-end">
+                        Referencia N°: <span id="correlativo_solicitud" class="text-danger">2025-00123</span>
+                    </div>
+                </div>
+                <section>
+                    <div id="formularioregistros">
+
+                        <form name="formulario_solicitud" id="formulario_solicitud" method="POST" novalidate>
+
+                            <input type="hidden" name="idsolicitud" id="idsolicitud" />
+
+                            <div class="row g-4">
+
+                                <div class="col-12">
+                                    <h5 class="text-secondary border-bottom pb-1">Datos de Identificación del
+                                        Solicitante</h5>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label for="rut" class="form-label">RUT (*)</label>
+                                    <input type="text" name="rut" id="rut" class="form-control" required maxlength="12"
+                                        placeholder="Ej: 12.345.678-9" />
+                                    <div class="invalid-feedback">El RUT ingresado no es válido.</div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="nombre" class="form-label">Nombre (*)</label>
+                                    <input type="text" name="nombre" id="nombre" class="form-control" required />
+                                    <div class="invalid-feedback">Solo se permiten letras en el nombre.</div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="apellido" class="form-label">Apellido (*)</label>
+                                    <input type="text" name="apellido" id="apellido" class="form-control" required />
+                                    <div class="invalid-feedback">Solo se permiten letras en el apellido.</div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="servicio" class="form-label">Servicio/Unidad (*)</label>
+                                    <select name="servicio" id="servicio" class="form-select" required>
+                                        <option value="">Seleccione el Servicio</option>
+                                        <option value="medicina">Medicina Interna</option>
+                                        <option value="cirugia">Cirugía</option>
+                                        <option value="urgencia">Urgencia</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                    <div class="invalid-feedback">Debe seleccionar un servicio.</div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="jefatura" class="form-label">Jefatura a Cargo (*)</label>
+                                    <input type="text" name="jefatura" id="jefatura" class="form-control" required />
+                                    <div class="invalid-feedback">Solo se permiten letras en el nombre de la Jefatura.
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <hr class="text-secondary">
+                                </div>
+
+                                <div class="col-12">
+                                    <h5 class="text-secondary border-bottom pb-1">Equipamiento Solicitado (*)</h5>
+                                    <div class="d-flex flex-wrap gap-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input equipo-check" type="checkbox"
+                                                value="proyector" id="check_proyector" name="equipos[]">
+                                            <label class="form-check-label" for="check_proyector">Proyector</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input equipo-check" type="checkbox"
+                                                value="notebook" id="check_notebook" name="equipos[]">
+                                            <label class="form-check-label" for="check_notebook">Notebook</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input equipo-check" type="checkbox"
+                                                value="fantomas" id="check_fantomas" name="equipos[]">
+                                            <label class="form-check-label" for="check_fantomas">Fantomas</label>
+                                        </div>
+                                    </div>
+                                    <div id="alerta-equipos" class="invalid-feedback">Debe seleccionar al menos un tipo
+                                        de equipamiento.</div>
+                                </div>
+
+                                <div class="col-12 border p-3 rounded-3" id="seccion_proyector" style="display:none;">
+                                    <h6 class="text-health-primary"><i class="bi bi-projector-fill me-1"></i> Detalle
+                                        Proyector
+                                    </h6>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-4">
+                                            <label for="proyector_tipo" class="form-label">Proyector (Modelo)</label>
+                                            <select name="proyector_tipo" id="proyector_tipo" class="form-select">
+                                                <option value="">Seleccione Modelo</option>
+                                                <option value="01">Proyector 01</option>
+                                                <option value="02">Proyector 02</option>
+                                                <option value="ambos">Ambos (01 y 02)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label for="proyector_modelo" class="form-label">Modelo</label>
+                                            <input type="text" name="proyector_modelo" id="proyector_modelo"
+                                                class="form-control" />
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label for="proyector_serie" class="form-label">Número de Serie</label>
+                                            <input type="text" name="proyector_serie" id="proyector_serie"
+                                                class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 border p-3 rounded-3" id="seccion_notebook" style="display:none;">
+                                    <h6 class="text-health-primary"><i class="bi bi-laptop-fill me-1"></i> Detalle
+                                        Notebook
+                                    </h6>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-4">
+                                            <label for="notebook_cantidad" class="form-label">Cantidad</label>
+                                            <input type="number" name="notebook_cantidad" id="notebook_cantidad"
+                                                class="form-control" min="1" max="10" />
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label for="notebook_modelo" class="form-label">Modelo</label>
+                                            <input type="text" name="notebook_modelo" id="notebook_modelo"
+                                                class="form-control" />
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label for="notebook_serie" class="form-label">Número de Serie</label>
+                                            <input type="text" name="notebook_serie" id="notebook_serie"
+                                                class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 border p-3 rounded-3" id="seccion_fantomas" style="display:none;">
+                                    <h6 class="text-health-primary"><i class="bi bi-person-bounding-box me-1"></i>
+                                        Detalle
+                                        Fantomas</h6>
+                                    <div class="row g-3">
+
+                                        <div class="col-12 col-md-6">
+                                            <label for="fantomas_tipo" class="form-label">Tipo de Fantomas (*)</label>
+                                            <select name="fantomas_tipo" id="fantomas_tipo" class="form-select"
+                                                required>
+                                                <option value="">Seleccione Tipo</option>
+                                                <option value="adulto">Adulto</option>
+                                                <option value="neonato">Neonato</option>
+                                                <option value="ambos">Ambos</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6" id="fantomas_cantidad_unica">
+                                            <label for="fantomas_cantidad" class="form-label">Cantidad (1 a 10)</label>
+                                            <select name="fantomas_cantidad" id="fantomas_cantidad" class="form-select">
+                                                <option value="">Seleccione Cantidad</option>
+                                                <?php for ($i = 1; $i <= 10; $i++): ?>
+                                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 row g-3" id="fantomas_cantidades_doble"
+                                            style="display:none;">
+                                            <div class="col-12 col-md-6">
+                                                <label for="fantomas_adulto_cantidad" class="form-label">Cantidad
+                                                    Fantomas Adulto (*)</label>
+                                                <select name="fantomas_adulto_cantidad" id="fantomas_adulto_cantidad"
+                                                    class="form-select">
+                                                    <option value="">Seleccione Cantidad (1-10)</option>
+                                                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                                                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                                    <?php endfor; ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="fantomas_neonato_cantidad" class="form-label">Cantidad
+                                                    Fantomas Neonato (*)</label>
+                                                <select name="fantomas_neonato_cantidad" id="fantomas_neonato_cantidad"
+                                                    class="form-select">
+                                                    <option value="">Seleccione Cantidad (1-10)</option>
+                                                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                                                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                                    <?php endfor; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <hr class="text-secondary">
+                                </div>
+
+                                <div class="col-12">
+                                    <h5 class="text-secondary border-bottom pb-1">Datos de la Capacitación/Evento (*)
+                                    </h5>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label for="fecha_inicio" class="form-label">Fecha de Inicio (*)</label>
+                                    <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control"
+                                        required />
+                                    <div class="invalid-feedback">La fecha de inicio es obligatoria.</div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label for="fecha_fin" class="form-label">Fecha de Devolución (*)</label>
+                                    <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" required />
+                                    <div class="invalid-feedback">La fecha de devolución es obligatoria.</div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label for="lugar" class="form-label">Lugar de Utilización (*)</label>
+                                    <input type="text" name="lugar" id="lugar" class="form-control" required />
+                                    <div class="invalid-feedback">El lugar es obligatorio.</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="justificacion" class="form-label">Justificación y Utilización del Uso
+                                        del Equipamiento (*)</label>
+                                    <textarea name="justificacion" id="justificacion" class="form-control" rows="3"
+                                        required></textarea>
+                                    <div class="invalid-feedback">Debe indicar la justificación para el uso.</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <hr class="text-secondary">
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="compromiso-equipos">
+                                        <h6 class="text-success mb-2"><i
+                                                class="bi bi-file-earmark-check-fill me-1 text-health-secondary"></i>
+                                            Compromiso de Devolución</h6>
+                                        <p class="mb-2 small">
+                                            Me comprometo a hacer devolución del equipamiento solicitado. Si es
+                                            **proyector** se devolverá junto a sus implementos (cable de poder, VGA,
+                                            control remoto, CD e instructivo). Si es **notebook** con su cargador y
+                                            adicionales si corresponde. Si es **phantomas para RCP** se devolverá en las
+                                            mismas condiciones entregadas. Esto según corresponda. El equipamiento se
+                                            devolverá en la **fecha acordada** y en las condiciones en las que fue
+                                            entregado.
+                                        </p>
+                                        <p class="mb-0 small fw-bold  ">
+                                            IMPORTANTE: En caso de **pérdida** de Proyector (o sus implementos), de
+                                            Notebook (o sus implementos), o de Fantomas, la responsabilidad será del
+                                            solicitante y no de la Unidad de Desarrollo de Personas y Organización. El
+                                            solicitante como responsable deberá realizar la devolución del equipamiento
+                                            solicitado, o su reemplazo por uno de las mismas características o superior,
+                                            en un plazo de **2 meses como máximo** a contar de la fecha de devolución
+                                            comprometida en la unidad.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                            id="aceptacion_devolucion" required>
+                                        <label class="form-check-label small" for="aceptacion_devolucion">
+                                            Declaro haber leído y acepto el **Compromiso de Devolución** y las
+                                            condiciones de uso.
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Debe aceptar el compromiso para enviar la solicitud.
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-12 mt-5">
+                                <h5 class="text-health-primary border-bottom pb-1"><i
+                                        class="bi bi-card-checklist me-1"></i>
+                                    Resumen de la Solicitud</h5>
+
+                                <div class="card resumen-card p-3 d-flex flex-row justify-content-between">
+
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-health-primary">Datos Personales y Unidad</h6>
+                                        <p class="mb-1 small">
+                                            **Referencia N°:** <span id="resumen_correlativo"
+                                                class="fw-bold text-danger">2025-00123</span><br>
+                                            **Solicitante:** <span id="resumen_nombre_apellido">N/A</span> (<span
+                                                id="resumen_rut">N/A</span>)<br>
+                                            **Servicio/Unidad:** <span id="resumen_servicio">N/A</span><br>
+                                            **Jefatura:** <span id="resumen_jefatura">N/A</span>
+                                        </p>
+
+                                        <h6 class="text-health-primary mt-3">Detalle del Equipamiento</h6>
+                                        <p class="mb-1 small" id="resumen_equipos">
+                                            No se ha seleccionado equipamiento.
+                                        </p>
+
+                                        <h6 class="text-health-primary mt-3">Fechas y Propósito</h6>
+                                        <p class="mb-1 small">
+                                            **Inicio:** <span id="resumen_fecha_inicio">N/A</span> | **Devolución:**
+                                            <span id="resumen_fecha_fin">N/A</span><br>
+                                            **Lugar:** <span id="resumen_lugar">N/A</span><br>
+                                            **Justificación:** <span id="resumen_justificacion"
+                                                class="fw-light fst-italic">N/A</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="ms-4 d-flex flex-column align-items-center justify-content-center">
+                                        <div class="qr-placeholder" id="qr_container">
+                                            QR (ID de Solicitud)
+                                        </div>
+                                        <small class="text-muted mt-1" style="font-size: 0.65rem;">Escanee para
+                                            validar</small>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <p class="text-muted small mt-4">Los campos marcados con (*) son obligatorios.</p>
+
+                            <div class="mt-4 d-flex justify-content-between gap-2">
+
+                                <div class="d-flex gap-2">
+                                    <button type="submit" id="btnGuardar" class="btn btn-health shadow-sm">
+                                        <i class="bi bi-send-fill"></i> Enviar Solicitud
+                                    </button>
+                                    <button type="button" onclick="window.print()"
+                                        class="btn btn-outline-info shadow-sm">
+                                        <i class="bi bi-printer-fill"></i> Imprimir Formulario
+                                    </button>
+                                </div>
+
+                                <button type="button" id="btnCerrar" class="btn btn-secondary shadow-sm">
+                                    <i class="bi bi-x-octagon-fill"></i> Finalizar y Volver
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center flex-column flex-sm-row">
+                <div class="mb-2 mb-sm-0">
+                    &copy; 2025 <a href="#" class="footer-logo-text text-decoration-none">UDOP - HEP</a>. Todos los
+                    derechos reservados.
+                </div>
+                <div class="text-center text-sm-end">
+                    <span class="d-block d-sm-inline me-2">Unidad de Desarrollo de Personas y Organización</span>
+                    <i class="bi bi-heart-pulse-fill text-danger me-1"></i>
+                    <i class="bi bi-hospital-fill text-health-primary"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
+
+    <script>
+        // -------------------------------------------------------------
+        // FUNCIONES DE SEGURIDAD, VALIDACIÓN Y FORMATO
+        // -------------------------------------------------------------
+
+        function validarRUT(rutCompleto) {
+            if (!rutCompleto) return false;
+            rutCompleto = rutCompleto.replace(/[^0-9kK]/g, '').toUpperCase();
+            if (rutCompleto.length < 2) return false;
+            const cuerpo = rutCompleto.slice(0, -1);
+            const dv = rutCompleto.slice(-1);
+            if (!/^\d+$/.test(cuerpo)) return false;
+            let suma = 0,
+                multiplo = 2;
+            for (let i = cuerpo.length - 1; i >= 0; i--) {
+                suma += parseInt(cuerpo.charAt(i), 10) * multiplo;
+                multiplo = multiplo < 7 ? multiplo + 1 : 2;
+            }
+            const resto = suma % 11;
+            let dvEsperado = 11 - resto;
+            if (dvEsperado === 11) dvEsperado = '0';
+            else if (dvEsperado === 10) dvEsperado = 'K';
+            else dvEsperado = String(dvEsperado);
+            return dvEsperado === dv;
+        }
+
+
+        function formatAndValidateRUT() {
+            let rutInput = document.getElementById('rut');
+            let valorLimpio = rutInput.value.replace(/[^0-9kK]/g, '').toUpperCase();
+            let rutFormateado = '';
+
+            const originalLength = rutInput.value.length;
+            const originalCursor = rutInput.selectionStart;
+
+            if (valorLimpio.length > 1) {
+                let dv = valorLimpio.slice(-1);
+                let cuerpo = valorLimpio.slice(0, -1);
+                cuerpo = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                rutFormateado = cuerpo + '-' + dv;
+            } else {
+                rutFormateado = valorLimpio;
+            }
+
+            rutInput.value = rutFormateado;
+
+            const newLength = rutInput.value.length;
+            const diff = newLength - originalLength;
+            rutInput.selectionStart = rutInput.selectionEnd = originalCursor + diff;
+
+            if (valorLimpio.length >= 7) {
+                if (validarRUT(valorLimpio)) {
+                    rutInput.classList.remove('is-invalid');
+                    rutInput.classList.add('is-valid');
+                } else {
+                    rutInput.classList.remove('is-valid');
+                    rutInput.classList.add('is-invalid');
+                }
+            } else {
+                rutInput.classList.remove('is-valid', 'is-invalid');
+            }
+            updateSummary();
+        }
+
+
+        function validateOnlyText(event) {
+            const input = event.target;
+            const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
+
+            const valorOriginal = input.value;
+            let valorLimpio = '';
+
+            for (let i = 0; i < valorOriginal.length; i++) {
+                const char = valorOriginal[i];
+                if (regex.test(char)) {
+                    valorLimpio += char;
+                }
+            }
+
+            if (valorLimpio !== valorOriginal) {
+                input.value = valorLimpio;
+            }
+        }
+
+
+        function sanitizeInput(str) {
+            if (!str) return '';
+            let cleanStr = str.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gm, "")
+                .replace(/<[^>]*>?/gm, "");
+            cleanStr = cleanStr.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+            return cleanStr.trim();
+        }
+
+
+        // -------------------------------------------------------------
+        // LÓGICA ESPECÍFICA DEL FORMULARIO DE EQUIPOS
+        // -------------------------------------------------------------
+
+        /**
+         * Muestra/Oculta la sección de detalles según el checkbox marcado.
+         */
+        function toggleEquipoSections() {
+            const checkedBoxes = document.querySelectorAll('.equipo-check:checked');
+            const proyectorChecked = document.getElementById('check_proyector').checked;
+            const notebookChecked = document.getElementById('check_notebook').checked;
+            const fantomasChecked = document.getElementById('check_fantomas').checked;
+
+            document.getElementById('seccion_proyector').style.display = proyectorChecked ? 'block' : 'none';
+            document.getElementById('seccion_notebook').style.display = notebookChecked ? 'block' : 'none';
+            document.getElementById('seccion_fantomas').style.display = fantomasChecked ? 'block' : 'none';
+
+            // Ejecutar lógica de cantidad de Fantomas si la sección está visible
+            if (fantomasChecked) {
+                toggleFantomasQuantity();
+            } else {
+                // Si la sección Fantomas se oculta, limpiar 'required' de todos los campos de cantidad
+                const qtyUnica = document.getElementById('fantomas_cantidad');
+                const qtyAdulto = document.getElementById('fantomas_adulto_cantidad');
+                const qtyNeonato = document.getElementById('fantomas_neonato_cantidad');
+                qtyUnica.removeAttribute('required');
+                qtyAdulto.removeAttribute('required');
+                qtyNeonato.removeAttribute('required');
+                document.getElementById('fantomas_tipo').removeAttribute('required');
+            }
+
+
+            // Validar que al menos un equipo esté seleccionado
+            if (checkedBoxes.length === 0) {
+                document.getElementById('alerta-equipos').style.display = 'block';
+            } else {
+                document.getElementById('alerta-equipos').style.display = 'none';
+            }
+
+            updateSummary();
+        }
+
+        /**
+         * Muestra la cantidad única o la doble (Adulto/Neonato) según el tipo seleccionado.
+         * También maneja los atributos 'required' de cada select.
+         */
+        function toggleFantomasQuantity() {
+            const tipoFantomas = document.getElementById('fantomas_tipo').value;
+            const unicaDiv = document.getElementById('fantomas_cantidad_unica');
+            const dobleDiv = document.getElementById('fantomas_cantidades_doble');
+            const qtyUnica = document.getElementById('fantomas_cantidad');
+            const qtyAdulto = document.getElementById('fantomas_adulto_cantidad');
+            const qtyNeonato = document.getElementById('fantomas_neonato_cantidad');
+
+            // Función para limpiar requeridos
+            const removeRequired = () => [qtyUnica, qtyAdulto, qtyNeonato].forEach(el => el.removeAttribute('required'));
+
+            // El campo tipo Fantomas siempre es requerido si el checkbox está marcado
+            if (document.getElementById('check_fantomas').checked) {
+                document.getElementById('fantomas_tipo').setAttribute('required', 'required');
+            }
+
+            removeRequired(); // Limpiar antes de asignar
+
+            if (tipoFantomas === 'ambos') {
+                // Mostrar los dos selects separados
+                unicaDiv.style.display = 'none';
+                dobleDiv.style.display = 'flex';
+
+                // Hacer que los campos dobles sean 'requeridos'
+                qtyAdulto.setAttribute('required', 'required');
+                qtyNeonato.setAttribute('required', 'required');
+
+            } else if (tipoFantomas === 'adulto' || tipoFantomas === 'neonato') {
+                // Mostrar la cantidad única
+                unicaDiv.style.display = 'block';
+                dobleDiv.style.display = 'none';
+
+                // Hacer que el campo único sea 'requerido'
+                qtyUnica.setAttribute('required', 'required');
+
+            } else {
+                // Caso por defecto (Seleccione Tipo...) 
+                unicaDiv.style.display = 'block';
+                dobleDiv.style.display = 'none';
+            }
+
+            updateSummary();
+        }
+
+        /**
+         * Actualiza el panel de resumen con los datos ingresados por el usuario.
+         */
+        function updateSummary() {
+            // Obtenemos el valor del correlativo (simulado para el prototipo)
+            const correlativoText = document.getElementById('correlativo_solicitud').textContent;
+
+            // --- 0. Correlativo en el Resumen ---
+            document.getElementById('resumen_correlativo').textContent = correlativoText;
+
+
+            // --- 1. Datos Personales ---
+            document.getElementById('resumen_nombre_apellido').textContent =
+                (document.getElementById('nombre').value || 'N/A') + ' ' + (document.getElementById('apellido').value ||
+                    '');
+            document.getElementById('resumen_rut').textContent = document.getElementById('rut').value || 'N/A';
+            const servicioSelect = document.getElementById('servicio');
+            document.getElementById('resumen_servicio').textContent = servicioSelect.options[servicioSelect.selectedIndex]
+                .text || 'N/A';
+            document.getElementById('resumen_jefatura').textContent = document.getElementById('jefatura').value || 'N/A';
+
+            // --- 2. Fechas y Propósito ---
+            document.getElementById('resumen_fecha_inicio').textContent = document.getElementById('fecha_inicio').value ||
+                'N/A';
+            document.getElementById('resumen_fecha_fin').textContent = document.getElementById('fecha_fin').value || 'N/A';
+            document.getElementById('resumen_lugar').textContent = document.getElementById('lugar').value || 'N/A';
+
+            // Mostrar solo un extracto de la justificación
+            const justificacionText = document.getElementById('justificacion').value;
+            document.getElementById('resumen_justificacion').textContent =
+                (justificacionText ? (justificacionText.length > 70 ? justificacionText.substring(0, 70) + '...' :
+                    justificacionText) : 'N/A');
+
+            // --- 3. Equipamiento Solicitado (Lógica Compleja) ---
+            let resumenEquiposHTML = '';
+            const equiposSeleccionados = [];
+
+            if (document.getElementById('check_proyector').checked) {
+                const tipoProyector = document.getElementById('proyector_tipo').value;
+                const modelo = document.getElementById('proyector_modelo').value;
+                const serie = document.getElementById('proyector_serie').value;
+                let tipoTxt = tipoProyector === 'ambos' ? 'Ambos' : (tipoProyector === '01' ? 'Proyector 01' : (
+                    tipoProyector === '02' ? 'Proyector 02' : 'No especificado'));
+                equiposSeleccionados.push(
+                    `**Proyector:** ${tipoTxt} (Modelo: ${modelo || 'N/A'} | Serie: ${serie || 'N/A'})`);
+            }
+
+            if (document.getElementById('check_notebook').checked) {
+                const cantidad = document.getElementById('notebook_cantidad').value;
+                const modelo = document.getElementById('notebook_modelo').value;
+                const serie = document.getElementById('notebook_serie').value;
+                equiposSeleccionados.push(
+                    `**Notebook:** ${cantidad || '1'} unidad(es) (Modelo: ${modelo || 'N/A'} | Serie: ${serie || 'N/A'})`
+                );
+            }
+
+            if (document.getElementById('check_fantomas').checked) {
+                const tipo = document.getElementById('fantomas_tipo').value;
+                let detalle = '';
+
+                if (tipo === 'ambos') {
+                    const adultoQty = document.getElementById('fantomas_adulto_cantidad').value;
+                    const neonatoQty = document.getElementById('fantomas_neonato_cantidad').value;
+                    detalle = `Ambos (Adulto: ${adultoQty || 'N/A'} | Neonato: ${neonatoQty || 'N/A'})`;
+                } else if (tipo === 'adulto' || tipo === 'neonato') {
+                    const qty = document.getElementById('fantomas_cantidad').value;
+                    detalle = `${tipo.charAt(0).toUpperCase() + tipo.slice(1)}: ${qty || 'N/A'} unidad(es)`;
+                } else {
+                    detalle = 'Tipo no especificado';
+                }
+                equiposSeleccionados.push(`**Fantomas:** ${detalle}`);
+            }
+
+            if (equiposSeleccionados.length > 0) {
+                // Usar un listado con <br>
+                resumenEquiposHTML = equiposSeleccionados.join('<br>');
+            } else {
+                resumenEquiposHTML = 'No se ha seleccionado equipamiento.';
+            }
+
+            document.getElementById('resumen_equipos').innerHTML = resumenEquiposHTML;
+        }
+
+
+        /**
+         * Maneja el envío del formulario, realizando todas las validaciones.
+         */
+        function handleFormSubmit(e) {
+            const formulario = document.getElementById('formulario_solicitud');
+            const rutInput = document.getElementById('rut');
+            const checkedBoxes = document.querySelectorAll('.equipo-check:checked');
+
+            // 1. Forzar validación final de RUT y actualizar secciones
+            formatAndValidateRUT();
+            toggleEquipoSections();
+
+            // 2. Validación de RUT y selección de equipo
+            if (!validarRUT(rutInput.value) || checkedBoxes.length === 0) {
+                e.preventDefault();
+                formulario.classList.add('was-validated');
+                return;
+            }
+
+            // 3. Detener envío si los campos 'required' de HTML5 no son válidos 
+            if (!formulario.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                formulario.classList.add('was-validated');
+                return;
+            }
+
+            // 4. *** APLICAR SANITIZACIÓN A LOS CAMPOS DE TEXTO LIBRE (SEGURIDAD XSS) ***
+            const camposASanitizar = [
+                'nombre', 'apellido', 'jefatura', 'lugar', 'justificacion',
+                'proyector_modelo', 'proyector_serie',
+                'notebook_modelo', 'notebook_serie'
+            ];
+
+            camposASanitizar.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = sanitizeInput(input.value);
+                }
+            });
+
+            // 5. *** LIMPIEZA FINAL DEL RUT PARA EL ENVÍO ***
+            // IMPORTANTE: En el backend usaremos el RUT limpio:
+            const cleanRutToSend = rutInput.value.replace(/\./g, '').replace(/-/g, '');
+            rutInput.value = cleanRutToSend;
+
+            // Si todo es válido, el formulario se envía al Controller (backend).
+
+            // e.preventDefault(); // Mantenemos esta línea comentada. Si el backend existe, se enviará.
+        }
+
+
+        // -------------------------------------------------------------
+        // ENLACE DE EVENTOS
+        // -------------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', function () {
+            const rutInput = document.getElementById('rut');
+            const formulario = document.getElementById('formulario_solicitud');
+            const equipoChecks = document.querySelectorAll('.equipo-check');
+            const btnCerrar = document.getElementById('btnCerrar');
+            const fantomasTipoSelect = document.getElementById('fantomas_tipo');
+
+            // Campos que deben ser SOLO TEXTO (Nombre, Apellido, Jefatura)
+            const camposSoloTexto = ['nombre', 'apellido', 'jefatura'];
+
+            // Enlace de la función para mostrar/ocultar secciones al cambiar checkbox
+            equipoChecks.forEach(check => {
+                check.addEventListener('change', toggleEquipoSections);
+            });
+
+            // Enlace de la función para cambiar la cantidad de Fantomas
+            if (fantomasTipoSelect) {
+                fantomasTipoSelect.addEventListener('change', toggleFantomasQuantity);
+            }
+
+            // Enlace para actualizar el resumen cada vez que se cambia un campo de entrada o select.
+            const allFormElements = formulario.querySelectorAll('input, select, textarea');
+            allFormElements.forEach(element => {
+                element.addEventListener('input', updateSummary);
+                element.addEventListener('change', updateSummary);
+            });
+
+
+            // Llamadas iniciales
+            toggleEquipoSections(); // Oculta secciones y aplica validación inicial
+            updateSummary(); // Muestra el resumen inicial
+
+            if (rutInput) {
+                rutInput.addEventListener('input', formatAndValidateRUT);
+            }
+
+            // Enlace de la validación SOLO TEXTO
+            camposSoloTexto.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', validateOnlyText);
+                }
+            });
+
+            if (formulario) {
+                formulario.addEventListener('submit', handleFormSubmit);
+                formulario.addEventListener('blur', (event) => {
+                    formulario.classList.add('was-validated');
+                }, true);
+            }
+
+            // LÓGICA DEL BOTÓN "Cerrar y Volver"
+            if (btnCerrar) {
+                btnCerrar.addEventListener('click', function () {
+                    // *** DEFINE AQUÍ LA URL DE REDIRECCIÓN ***
+                    const urlDestino = "https://www.tu-sitio-web-de-salud.cl/pagina-principal";
+
+                    if (confirm(
+                        '¿Estás seguro de que quieres cerrar el formulario sin enviar los datos?')) {
+                        window.location.href = urlDestino;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

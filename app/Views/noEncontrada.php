@@ -1,5 +1,5 @@
 <?php
-// ==========================================================
+/*// ==========================================================
 // 1. LÓGICA DE SESIÓN Y AUTENTICACIÓN (¡Debe ser lo primero!)
 // ==========================================================
 
@@ -12,11 +12,11 @@ if (strlen(session_id()) < 1) {
 if (!isset($_SESSION['idusuario']) || $_SESSION['idusuario'] == null) {
     header("Location: ../index.php"); // Asegúrate de que esta ruta sea correcta para tu página de login
     exit();
-}
+}*/
 
 // 2. INCLUIR EL ENCABEZADO
 // El header.php abre: <html>, <head>, <body> y <div class="wrapper">.
-require_once "header.php";
+require_once 'header.php';
 ?>
 
 

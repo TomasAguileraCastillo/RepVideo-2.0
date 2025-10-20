@@ -1,0 +1,487 @@
+<?php
+// vistas/crear_usuario.php
+
+// Incluimos nuestro archivo de inicialización.
+require __DIR__ . '/../config/init.php';
+
+// Esta página permite a un administrador (o el mismo usuario) crear una cuenta de sistema.
+
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../../src/Public/img/icons/favicon.png">
+    <title>Creación de Usuario | HEP - UDOP</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* Paleta de Salud REPLICADA EXACTAMENTE */
+        :root {
+            --health-primary: #004c99;
+            /* Azul más profundo y profesional */
+            --health-secondary: #28a745;
+            /* Verde de éxito/vida */
+            --health-light: #e6f0ff;
+            /* Azul muy claro para fondos sutiles */
+        }
+
+        .bg-health-primary {
+            background-color: var(--health-primary) !important;
+        }
+
+        .text-health-primary {
+            color: var(--health-primary) !important;
+        }
+
+        /* Estilo de Botón .btn-health REPLICADO EXACTAMENTE */
+        .btn-health {
+            background-color: var(--health-primary);
+            color: white;
+            border-color: var(--health-primary);
+            transition: all 0.2s ease-in-out;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 0.5rem;
+        }
+
+        .btn-health:hover {
+            background-color: #003366;
+            border-color: #003366;
+            box-shadow: 0 4px 8px rgba(0, 76, 153, 0.4);
+        }
+
+        /* Fondo general y centrado — OPTIMIZADO PARA ALTURA */
+        body {
+            background-color: var(--health-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            /* AJUSTE CLAVE: Menos padding superior/inferior para compactar */
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        /* Input flotante: Estilo de foco consistente con el primario de salud */
+        .form-control:focus~label {
+            color: var(--health-primary);
+        }
+
+        .form-control:focus {
+            border-color: var(--health-primary);
+            box-shadow: 0 0 0 0.25rem rgba(0, 76, 153, 0.25);
+        }
+
+        /* Título Principal (Ajustado para formularios grandes) */
+        .main-title-form {
+            color: var(--health-primary);
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        /* Diseño de Tarjeta Centrada (Ancho de 950px mantenido) */
+        .form-card-wrapper {
+            max-width: 950px;
+            width: 90%;
+            /* Mantenemos padding interno de 40px 50px */
+            padding: 40px 50px;
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            background-color: #ffffff;
+            margin: 0 auto;
+        }
+
+        /* Ojo de Mostrar Contraseña */
+        .input-group-text.toggle-password {
+            cursor: pointer;
+            color: var(--health-primary);
+            background-color: transparent;
+            border-left: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-card-wrapper">
+
+        <div class="text-center">
+            <i class="bi bi-person-plus-fill text-health-primary mb-3" style="font-size: 2.5rem;"></i>
+        </div>
+
+        <h1 class="main-title-form text-center">Creación de Cuenta de Usuario</h1>
+        <p class="text-muted small mb-3 text-center">
+            Asigne credenciales y valide la identidad de la persona para el acceso al sistema.
+        </p>
+
+        <form class="row g-2 needs-validation" method="post" id="frmCrearUsuario" novalidate>
+
+            <h5 class="mt-3 mb-1 text-health-primary fw-bold">1. Credenciales de Acceso</h5>
+
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario"
+                        placeholder="Nombre de Usuario" autocomplete="off" required minlength="4">
+                    <label for="nombre_usuario"><i class="bi bi-person-circle me-2"></i> Nombre de Usuario (*)</label>
+                    <div class="invalid-feedback">Mínimo 4 caracteres (letras y números).</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="input-group">
+                    <div class="form-floating flex-grow-1">
+                        <input type="password" class="form-control" id="clave_nueva" name="clave_nueva"
+                            placeholder="Contraseña" autocomplete="new-password" required minlength="8"
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                            title="Debe contener al menos 8 caracteres, incluyendo un número, una mayúscula y una minúscula.">
+                        <label for="clave_nueva">Contraseña (*)</label>
+                        <div class="invalid-feedback" id="clave-feedback">
+                            Mínimo 8 caracteres, un número, una mayúscula y una minúscula.
+                        </div>
+                    </div>
+                    <span class="input-group-text toggle-password" data-target="clave_nueva">
+                        <i class="bi bi-eye-slash-fill"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="input-group">
+                    <div class="form-floating flex-grow-1">
+                        <input type="password" class="form-control" id="clave_confirmar" name="clave_confirmar"
+                            placeholder="Confirmar Contraseña" autocomplete="new-password" required minlength="8">
+                        <label for="clave_confirmar">Confirmar Contraseña (*)</label>
+                        <div class="invalid-feedback" id="confirmar-feedback">Las contraseñas no coinciden.</div>
+                    </div>
+                    <span class="input-group-text toggle-password" data-target="clave_confirmar">
+                        <i class="bi bi-eye-slash-fill"></i>
+                    </span>
+                </div>
+            </div>
+
+            <h5 class="mt-3 mb-1 text-health-primary fw-bold">2. Identificación y Contacto</h5>
+
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="rut_persona" name="rut_persona"
+                        placeholder="RUT Chileno" autocomplete="off" required>
+                    <label for="rut_persona"><i class="bi bi-person-badge me-2"></i> RUT Chileno (*)</label>
+                    <div class="invalid-feedback" id="rut-feedback">Por favor ingrese un RUT válido.</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre(s)" required>
+                    <label for="nombre"><i class="bi bi-person-vcard me-2"></i> Nombre(s) (*)</label>
+                    <div class="invalid-feedback">Solo se permiten letras en el nombre.</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido(s)"
+                        required>
+                    <label for="apellido"><i class="bi bi-person-vcard me-2"></i> Apellido(s) (*)</label>
+                    <div class="invalid-feedback">Solo se permiten letras en el apellido.</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo Electrónico"
+                        required>
+                    <label for="correo"><i class="bi bi-envelope-fill me-2"></i> Correo Electrónico (*)</label>
+                    <div class="invalid-feedback">Ingrese un formato de correo electrónico válido.</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="tel" class="form-control" id="telefono" name="telefono"
+                        placeholder="Teléfono (+569xxxxxxxx)" required pattern="\+569\d{8}">
+                    <label for="telefono"><i class="bi bi-phone-fill me-2"></i> Teléfono (+569xxxxxxxx) (*)</label>
+                    <div class="invalid-feedback">Formato requerido: +569xxxxxxxx.</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"
+                        placeholder="Fecha de Nacimiento" required>
+                    <label for="fecha_nacimiento"><i class="bi bi-calendar-date-fill me-2"></i> Fecha de Nacimiento
+                        (*)</label>
+                    <div class="invalid-feedback">Seleccione su fecha de nacimiento.</div>
+                </div>
+            </div>
+
+
+            <div class="col-12 d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-health btn-lg" id="btnCrearUsuario" name="crear">
+                    <i class="bi bi-person-check-fill me-2"></i> Crear Usuario en el Sistema
+                </button>
+            </div>
+
+            <div class="col-12 text-center">
+                <a href="dashboard.php"
+                    class="text-link-health small mt-3 d-block text-health-primary text-decoration-none">
+                    <i class="bi bi-arrow-left me-1"></i> Volver al panel de administración
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
+
+    <script type="text/javascript">
+        // -------------------------------------------------------------
+        // FUNCIONES DE SEGURIDAD Y VALIDACIÓN (REPLICADAS Y ADAPTADAS)
+        // -------------------------------------------------------------
+
+        // Función de Sanitización (Replicada)
+        function sanitizeInput(str) {
+            if (!str) return '';
+            let cleanStr = str.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gm, "")
+                .replace(/<[^>]*>?/gm, "");
+            cleanStr = cleanStr.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+            return cleanStr.trim();
+        }
+
+        // Función de Validación de Solo Texto (Replicada de solicitudInduccion.html)
+        function validateOnlyText(event) {
+            const input = event.target;
+            // Permitir letras, espacios, tildes (acentos) y la letra Ñ/ñ
+            input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        }
+
+        // Validación y Formato de RUT (Replicada)
+        function validarRUT(rutCompleto) {
+            if (!rutCompleto) return false;
+            rutCompleto = rutCompleto.replace(/[^0-9kK]/g, '').toUpperCase();
+            if (rutCompleto.length < 2) return false;
+            const cuerpo = rutCompleto.slice(0, -1);
+            const dv = rutCompleto.slice(-1);
+            if (!/^\d+$/.test(cuerpo)) return false;
+            let suma = 0, multiplo = 2;
+            for (let i = cuerpo.length - 1; i >= 0; i--) {
+                suma += parseInt(cuerpo.charAt(i), 10) * multiplo;
+                multiplo = multiplo < 7 ? multiplo + 1 : 2;
+            }
+            const resto = suma % 11;
+            let dvEsperado = 11 - resto;
+            if (dvEsperado === 11) dvEsperado = '0';
+            else if (dvEsperado === 10) dvEsperado = 'K';
+            else dvEsperado = String(dvEsperado);
+            return dvEsperado === dv;
+        }
+
+        function formatRUT(rutInput) {
+            let valorLimpio = rutInput.value.replace(/[^0-9kK]/g, '').toUpperCase();
+            let rutFormateado = '';
+
+            const originalLength = rutInput.value.length;
+            const originalCursor = rutInput.selectionStart;
+
+            if (valorLimpio.length > 1) {
+                let dv = valorLimpio.slice(-1);
+                let cuerpo = valorLimpio.slice(0, -1);
+                cuerpo = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                rutFormateado = cuerpo + '-' + dv;
+            } else {
+                rutFormateado = valorLimpio;
+            }
+
+            rutInput.value = rutFormateado;
+
+            const newLength = rutInput.value.length;
+            const diff = newLength - originalLength;
+            rutInput.selectionStart = rutInput.selectionEnd = originalCursor + diff;
+
+
+            // Validación visual
+            const feedbackElement = document.getElementById('rut-feedback');
+
+            if (valorLimpio.length >= 7) {
+                if (validarRUT(valorLimpio)) {
+                    rutInput.classList.remove('is-invalid');
+                    rutInput.classList.add('is-valid');
+                    feedbackElement.textContent = "RUT válido.";
+                } else {
+                    rutInput.classList.remove('is-valid');
+                    rutInput.classList.add('is-invalid');
+                    feedbackElement.textContent = "El RUT ingresado no es válido.";
+                }
+            } else {
+                rutInput.classList.remove('is-valid', 'is-invalid');
+                feedbackElement.textContent = "Por favor ingrese un RUT válido.";
+            }
+        }
+
+        // Función para dar formato al teléfono
+        function formatPhone(phoneInput) {
+            let valorLimpio = phoneInput.value.replace(/[^\d]/g, '');
+            if (valorLimpio.length > 0 && !valorLimpio.startsWith('569')) {
+                valorLimpio = '569' + valorLimpio;
+            }
+            if (valorLimpio.startsWith('569') && valorLimpio.length >= 11) {
+                phoneInput.value = '+' + valorLimpio.slice(0, 2) + valorLimpio.slice(2, 3) + valorLimpio.slice(3, 11);
+                phoneInput.classList.remove('is-invalid');
+                phoneInput.classList.add('is-valid');
+            } else if (valorLimpio.length > 0) {
+                phoneInput.classList.add('is-invalid');
+                phoneInput.classList.remove('is-valid');
+            } else {
+                phoneInput.classList.remove('is-valid', 'is-invalid');
+            }
+            if (valorLimpio.startsWith('569')) {
+                phoneInput.value = '+' + valorLimpio;
+            }
+        }
+
+        // Función de UX para mostrar/ocultar la contraseña
+        function togglePasswordVisibility(e) {
+            const toggleElement = e.currentTarget;
+            const targetId = toggleElement.getAttribute('data-target');
+            const targetInput = document.getElementById(targetId);
+            const icon = toggleElement.querySelector('i');
+
+            if (targetInput.type === "password") {
+                targetInput.type = "text";
+                icon.classList.remove('bi-eye-slash-fill');
+                icon.classList.add('bi-eye-fill');
+            } else {
+                targetInput.type = "password";
+                icon.classList.remove('bi-eye-fill');
+                icon.classList.add('bi-eye-slash-fill');
+            }
+        }
+
+        function handleCrearUsuarioSubmit(e) {
+            e.preventDefault();
+            const formulario = document.getElementById('frmCrearUsuario');
+            const claveNuevaInput = document.getElementById('clave_nueva');
+            const claveConfirmarInput = document.getElementById('clave_confirmar');
+            const rutInput = document.getElementById('rut_persona');
+
+            // 1. Forzar formato de RUT y validación visual
+            formatRUT(rutInput);
+
+            // 2. Aplicar validación de Bootstrap (campos requeridos y patrones)
+            if (!formulario.checkValidity()) {
+                e.stopPropagation();
+                formulario.classList.add('was-validated');
+                return;
+            }
+
+            // 3. Validación de Coincidencia de Contraseñas (CRÍTICO)
+            if (claveNuevaInput.value !== claveConfirmarInput.value) {
+                e.stopPropagation();
+                claveConfirmarInput.classList.add('is-invalid');
+                claveConfirmarInput.classList.remove('is-valid');
+                document.getElementById('confirmar-feedback').textContent = "Las contraseñas no coinciden.";
+
+                alert('Las contraseñas ingresadas no coinciden. Por favor, verifique.');
+                return;
+            } else {
+                claveConfirmarInput.classList.remove('is-invalid');
+                claveConfirmarInput.classList.add('is-valid');
+            }
+
+            // 4. Validación final de RUT
+            const rutLimpio = rutInput.value.replace(/[^0-9kK]/g, '').toUpperCase();
+            if (!validarRUT(rutInput.value)) {
+                e.stopPropagation();
+                rutInput.classList.add('is-invalid');
+                alert('El RUT ingresado no es válido. Por favor, verifique.');
+                return;
+            }
+
+            // 5. *** APLICAR SANITIZACIÓN *** (Previene XSS antes del envío)
+            const camposASanitizar = ['nombre_usuario', 'clave_nueva', 'clave_confirmar', 'nombre', 'apellido', 'correo', 'telefono'];
+            const datosAEnviar = {};
+
+            camposASanitizar.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    datosAEnviar[id] = sanitizeInput(input.value);
+                }
+            });
+
+            // Tratamiento especial para RUT y Fecha
+            datosAEnviar['rut_persona'] = sanitizeInput(rutLimpio); // RUT sin puntos ni guiones
+            datosAEnviar['fecha_nacimiento'] = document.getElementById('fecha_nacimiento').value;
+
+
+            // 6. Lógica de Envío (Aquí se conectaría con tu backend PHP)
+
+            // Simulación de envío:
+            console.log('Datos listos para enviar:', datosAEnviar);
+            alert(`✅ Usuario "${datosAEnviar.nombre_usuario}" creado con éxito para el RUT ${rutInput.value}.\n(Datos sanitizados listos para el servidor)`);
+
+            // Limpiar formulario y/o redirigir
+            // formulario.reset();
+            // window.location.href = "usuarios.php"; 
+        }
+
+        // -------------------------------------------------------------
+        // ENLACE DE EVENTOS
+        // -------------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', function () {
+            const formulario = document.getElementById('frmCrearUsuario');
+            const rutInput = document.getElementById('rut_persona');
+            const telefonoInput = document.getElementById('telefono');
+
+            // Enlace de validación de formato (RUT)
+            if (rutInput) {
+                rutInput.addEventListener('input', () => formatRUT(rutInput));
+                rutInput.addEventListener('blur', () => formatRUT(rutInput));
+            }
+
+            // Enlace de formato de Teléfono
+            if (telefonoInput) {
+                telefonoInput.addEventListener('input', () => formatPhone(telefonoInput));
+            }
+
+            // Enlace de validación de Solo Texto
+            document.getElementById('nombre').addEventListener('input', validateOnlyText);
+            document.getElementById('apellido').addEventListener('input', validateOnlyText);
+
+
+            // Enlace de Mostrar/Ocultar Contraseña
+            document.querySelectorAll('.toggle-password').forEach(toggle => {
+                toggle.addEventListener('click', togglePasswordVisibility);
+            });
+
+
+            // Enlace de la función de manejo de envío del formulario
+            if (formulario) {
+                formulario.addEventListener('submit', handleCrearUsuarioSubmit);
+            }
+        });
+    </script>
+</body>
+
+</html>

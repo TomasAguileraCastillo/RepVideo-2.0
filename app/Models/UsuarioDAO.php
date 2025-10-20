@@ -22,19 +22,19 @@ class UsuarioDAO
      * Inserta un nuevo registro de usuario de forma segura con sentencia preparada y transacción.
      * Mantiene la lógica de transacción aquí, usando la conexión MySQLi directa.
      *
-     * @param string $nombre      Nombre del usuario.
-     * @param string $tipoDoc     Tipo de documento.
-     * @param int $numDoc         Número de documento.
-     * @param string $direccion   Dirección.
-     * @param int $telefono       Teléfono.
-     * @param string $email       Correo electrónico.
-     * @param string $login       Nombre de usuario para login.
-     * @param string $clave       Contraseña (será hasheada internamente).
-     * @param string $imagen      Ruta de la imagen.
+     * @param string $nombre      Nombre del usuario.
+     * @param string $tipoDoc     Tipo de documento.
+     * @param int $numDoc         Número de documento.
+     * @param string $direccion   Dirección.
+     * @param int $telefono      Teléfono.
+     * @param string $email       Correo electrónico.
+     * @param string $login       Nombre de usuario para login.
+     * @param string $clave       Contraseña (será hasheada internamente).
+     * @param string $imagen      Ruta de la imagen.
      * @param string $descripcion Descripción del usuario.
      * @param string $fechasubida Fecha de subida (formato 'YYYY-MM-DD').
-     * @param int $subidopor      ID del usuario que crea el registro.
-     * @param int $condicion      Condición/estado del usuario (por defecto 1).
+     * @param int $subidopor      ID del usuario que crea el registro.
+     * @param int $condicion      Condición/estado del usuario (por defecto 1).
      * @return bool Retorna TRUE si la inserción fue exitosa y la transacción se confirmó.
      * @throws \Exception Si falla la preparación, la vinculación, la ejecución o la transacción.
      */
@@ -110,13 +110,13 @@ class UsuarioDAO
      * Actualiza la información de un registro en la base de datos (Usuario).
      *
      * @param int $idUsuario ID único del usuario a actualizar (condición WHERE).
-     * @param string $nombre     Nombre completo del usuario.
-     * @param string $tipoDoc    Tipo de documento de identificación.
-     * @param int $numDoc        Número de documento.
-     * @param string $direccion  Dirección residencial del usuario.
-     * @param int $telefono      Número de teléfono de contacto.
-     * @param string $email      Correo electrónico.
-     * @param string $imagen     Ruta o nombre del archivo de imagen de perfil.
+     * @param string $nombre    Nombre completo del usuario.
+     * @param string $tipoDoc Tipo de documento de identificación.
+     * @param int $numDoc         Número de documento.
+     * @param string $direccion    Dirección residencial del usuario.
+     * @param int $telefono       Número de teléfono de contacto.
+     * @param string $email        Correo electrónico.
+     * @param string $imagen     Ruta o nombre del archivo de imagen de perfil.
      * @param string $descripcion Descripción o notas adicionales del usuario.
      * @return bool Retorna TRUE si la actualización fue exitosa y la transacción se confirmó.
      * @throws \Exception Si falla la preparación de la consulta, la vinculación o la ejecución.
@@ -209,18 +209,22 @@ class UsuarioDAO
     public function listarusuarios()
     {
         // 1. Definición de la consulta (sin parámetros necesarios)
-        $sql = ' SELECT idusuario,
-                        nombre, 
-                        tipo_documento, 
-                        num_documento, 
-                        direccion, 
-                        telefono, 
-                        email, 
-                        imagen, 
-                        condicion, 
-                        descripcion, 
-                        fechSubida, 
-                        creadopor
+        // Nota: Agregué 'apellido', 'fech_Nac', 'rut' a esta consulta de ejemplo,
+        // pero asegúrate de que existen en tu tabla si los necesitas.
+        $sql = 'SELECT   idusuario, 
+                         nombre, 
+                         apellido, 
+                         fech_Nac, 
+                         rut, 
+                         direccion, 
+                         telefono, 
+                         email, 
+                         login, 
+                         imagen, 
+                         condicion, 
+                         descripcion, 
+                         fechSubida, 
+                         creadopor
                 FROM usuario;';
 
         try {
@@ -256,17 +260,17 @@ class UsuarioDAO
     public function obtenerUsuarioPorId($idUsuario)
     {
         $sql = ' SELECT idusuario,
-                        nombre, 
-                        tipo_documento, 
-                        num_documento, 
-                        direccion, 
-                        telefono, 
-                        email, 
-                        imagen, 
-                        condicion, 
-                        descripcion, 
-                        fechSubida, 
-                        creadopor
+                         nombre, 
+                         tipo_documento, 
+                         num_documento, 
+                         direccion, 
+                         telefono, 
+                         email, 
+                         imagen, 
+                         condicion, 
+                         descripcion, 
+                         fechSubida, 
+                         creadopor
                 FROM usuario
                 WHERE idusuario = ?;';
 

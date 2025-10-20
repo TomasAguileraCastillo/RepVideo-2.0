@@ -67,13 +67,16 @@ function cancelarform() {
 
 //Función Listar
 function listar() {
-  tabla = $("#tbllistado")
-    .dataTable({
+  tabla = $("#tbllistado").dataTable({
       lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      buttons: [
+                "copyHtml5", 
+                "excelHtml5", 
+                "csvHtml5", 
+                "pdfHtml5"],
       ajax: {
         url: "../ajax/video.php?op=listar",
         type: "get",
@@ -205,7 +208,8 @@ function desactivar(idadesactivar) {
 /********************************************************************************** */
 //Función para activar registros
 function activar(idadesactivar) {
-  bootbox.confirm("¿Está Seguro de activar el Registro?", function (result) {
+  bootbox.confirm("¿Está Seguro de activar el Registro?",
+     function (result) {
     if (result) {
       $.post(
         "../ajax/video.php?op=activar",

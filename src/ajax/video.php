@@ -199,6 +199,7 @@ switch ($_GET["op"]) {
         ];
         echo json_encode($results);
         break;
+        /*************************************************************** */
     case "seleccionCurso":
         require_once "../modelo/Video.php";
         echo '<option value="" selected disabled hidden>  </option>';

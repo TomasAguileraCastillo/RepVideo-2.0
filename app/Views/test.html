@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Validación de RUT Chileno (Máscara con Puntos)</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Estilos para centrar y dar un mejor aspecto al formulario */
+    body {
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      max-width: 500px;
+      margin-top: 50px;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      background-color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2 class="mb-4">Formulario de Prueba de RUT (Máscara con Puntos)</h2>
+
+    <form id="formulario-prueba" novalidate>
+      <div class="mb-3">
+        <label for="rut" class="form-label">Número de RUT (*)</label>
+        <input type="text" name="rut" id="rut" class="form-control" required placeholder="Ej: 12.345.678-9"
+          maxlength="12" />
+        <div class="invalid-feedback">
+          El RUT ingresado no es válido. Debe tener el formato: XX.XXX.XXX-X.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" id="nombre" class="form-control" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+
+    /**
+     * Valida el dígito verificador (DV) de un RUT chileno usando el Algoritmo Módulo 11.
+     */
+    function validarRUT(rutCompleto) {
+      if (!rutCompleto) return false;
+
+      // 1. Limpiar: Solo números y K/k
+      rutCompleto = rutCompleto.replace(/[^0-9kK]/g, '').toUpperCase();
+      if (rutCompleto.length < 2) return false;
+
+      const cuerpo = rutCompleto.slice(0, -1);
+      const dv = rutCompleto.slice(-1);
+
+      if (!/^\d+$/.test(cuerpo)) return false;
+
+      // 2. Calcular el dígito verificador
+      let suma = 0;
+      let multiplo = 2;
+
+      for (let i = cuerpo.length - 1; i >= 0; i--) {
+        suma += parseInt(cuerpo.charAt(i), 10) * multiplo;
+        multiplo = multiplo < 7 ? multiplo + 1 : 2;
+      }
+
+      const resto = suma % 11;
+      let dvEsperado = 11 - resto;
+
+      // 3. Mapear el DV esperado
+      if (dvEsperado === 11) {
+        dvEsperado = '0';
+      } else if (dvEsperado === 10) {
+        dvEsperado = 'K';
+      } else {
+        dvEsperado = String(dvEsperado);
+      }
+
+      // 4. Comparar
+      return dvEsperado === dv;
+    }
+
+
+    /**
+     * Aplica la MÁSCARA CON PUNTOS y GUION, y las clases de validación de Bootstrap.
+     */
+    function formatAndValidateRUT() {
+      let rutInput = document.getElementById('rut');
+      let valorLimpio = rutInput.value.replace(/[^0-9kK]/g, '').toUpperCase();
+      let rutFormateado = '';
+
+      // Guardamos la posición del cursor antes de cambiar el valor.
+      const originalLength = rutInput.value.length;
+      const originalCursor = rutInput.selectionStart;
+
+      // --- Lógica para aplicar la MÁSCARA CON PUNTOS:
+      if (valorLimpio.length > 1) {
+        let dv = valorLimpio.slice(-1);
+        let cuerpo = valorLimpio.slice(0, -1);
+
+        // APLICAMOS LOS PUNTOS para la MÁSCARA VISUAL
+        cuerpo = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        // Formato con puntos y guion para el input.value (VISUAL)
+        rutFormateado = cuerpo + '-' + dv;
+      } else {
+        rutFormateado = valorLimpio;
+      }
+
+      // El input.value se actualiza con la MÁSCARA CON PUNTOS
+      rutInput.value = rutFormateado;
+
+      // Ajustamos el cursor a la posición correcta
+      const newLength = rutInput.value.length;
+      const diff = newLength - originalLength;
+      rutInput.selectionStart = rutInput.selectionEnd = originalCursor + diff;
+
+
+      // --- Lógica para aplicar estilos de validación de Bootstrap:
+      if (valorLimpio.length >= 7) {
+        if (validarRUT(valorLimpio)) {
+          rutInput.classList.remove('is-invalid');
+          rutInput.classList.add('is-valid');
+        } else {
+          rutInput.classList.remove('is-valid');
+          rutInput.classList.add('is-invalid');
+        }
+      } else {
+        rutInput.classList.remove('is-valid', 'is-invalid');
+      }
+    }
+
+
+    /**
+     * Maneja el envío del formulario: valida el RUT y lo limpia (sin puntos) antes de enviarlo.
+     */
+    function handleFormSubmit(e) {
+      const rutInput = document.getElementById('rut');
+
+      // 1. Forzar validación final y aplicar la máscara (con puntos y guion)
+      formatAndValidateRUT();
+
+      // 2. Obtener el valor de la MÁSCARA
+      const maskedValue = rutInput.value;
+
+      // 3. Validar el RUT (usa el valor limpio internamente)
+      if (!validarRUT(maskedValue)) {
+        e.preventDefault(); // Detener el envío si no es válido
+        rutInput.focus();
+        return;
+      }
+
+      // 4. *** PUNTO CLAVE: Limpiar el valor para el envío (solo guion, sin puntos) ***
+      const cleanValueToSend = maskedValue.replace(/\./g, ''); // Quitamos solo los puntos
+      rutInput.value = cleanValueToSend;
+
+      // 5. El formulario continuará con el envío usando el valor limpio (ej: 12345678-9)
+
+      // IMPORTANTE: Si necesitas ver el valor enviado para depuración, descomenta las siguientes 2 líneas
+      e.preventDefault();
+      alert('RUT a enviar (SOLO GUION): ' + rutInput.value);
+    }
+
+
+    // -------------------------------------------------------------
+    // ENLAZAR EVENTOS
+    // -------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', function () {
+      const rutInput = document.getElementById('rut');
+      const formulario = document.getElementById('formulario-prueba');
+
+      if (rutInput) {
+        // Ejecutar formato y validación en tiempo real al escribir
+        rutInput.addEventListener('input', formatAndValidateRUT);
+      }
+
+      if (formulario) {
+        // Usar la función de manejo de envío, que limpia el valor antes de enviarlo
+        formulario.addEventListener('submit', handleFormSubmit);
+
+      }
+    });
+
+  </script>
+
+</body>
+
+</html>

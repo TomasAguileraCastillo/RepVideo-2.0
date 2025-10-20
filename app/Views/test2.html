@@ -1,0 +1,83 @@
+<?php
+
+require_once 'header.php';
+?>
+
+<br>
+
+
+<style>
+    /*/* Paleta con Tonos de Azul y Verde (Sin Blanco, Rojo, Gris, Morado, Beige) */
+
+    /* Azul Marino Oscuro (Acciones principales, Confianza) */
+    .btn-health-marine-primary {
+        color: #fff;
+        background-color: #003366;
+        /* Azul Marino Profundo */
+        border-color: #003366;
+    }
+
+    .btn-health-marine-primary:hover {
+        background-color: #001a33;
+        border-color: #000d1a;
+    }
+
+    /* Azul Cian (Advertencia / Bloquear. Notorio y asociado a la limpieza) */
+    .btn-health-cyan-alert {
+        color: #003366;
+        /* Texto en color principal para buen contraste */
+        background-color: #4dd0e1;
+        /* Cian Brillante */
+        border-color: #4dd0e1;
+    }
+
+    .btn-health-cyan-alert:hover {
+        background-color: #26c6da;
+        border-color: #00bcd4;
+    }
+
+
+
+    /* Verde Azulado (Éxito/Confirmación, Higiene) */
+    .btn-health-teal-success {
+        color: #fff;
+        background-color: #008080;
+        /* Verde Azulado (Teal) */
+        border-color: #008080;
+    }
+
+    .btn-health-teal-success:hover {
+        background-color: #005f5f;
+        border-color: #004c4c;
+    }
+
+    /* Verde Oscuro (Secundario/Eliminar. Estabilidad, usado en cirugía.) */
+    .btn-health-deep-secondary {
+        color: #fff;
+        background-color: #1b5e20;
+        /* Verde Bosque Oscuro */
+        border-color: #1b5e20;
+    }
+
+    .btn-health-deep-secondary:hover {
+        background-color: #003300;
+        border-color: #001a00;
+    }
+</style>
+<div class="btn-group shadow-sm">
+
+    <button class="btn btn-health-marine-primary btn-sm shadow-sm"><i class="bi bi-pencil-square"></i></button>
+
+    <button class="btn btn-health-cyan-alert btn-sm shadow-sm"><i class="bi bi-x-octagon-fill"></i></button>
+
+    <button class="btn btn-health-teal-success btn-sm shadow-sm"><i class="bi bi-pencil-square"></i></button>
+
+    <button class="btn btn-health-marine-primary btn-sm shadow-sm"><i class="bi bi-check-circle-fill"></i></button>
+
+    <button class="btn btn-health-deep-secondary btn-sm shadow-sm"><i class="bi bi-trash-fill"></i></button>
+
+</div>
+<?php
+
+require_once 'f.php';
+?>
